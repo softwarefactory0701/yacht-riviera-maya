@@ -128,6 +128,16 @@ export interface TalentProfile {
   availability: string;
   image: string;
   notes: string;
+  phone: string;
+  email: string;
+  experience: string;
+  specialty: string;
+  location: string;
+  operations: number;
+  rating: number;
+  responseTime: string;
+  availabilitySchedule: { date: string; status: string }[];
+  history: { id: string; service: string; date: string; status: string }[];
 }
 export interface QuoteItem {
   id: string;

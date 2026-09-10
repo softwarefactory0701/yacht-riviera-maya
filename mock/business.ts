@@ -231,6 +231,63 @@ export const catalog: CatalogItem[] = [
     ],
   },
 ];
+const talentDetails = (
+  index: number,
+  name: string,
+  category: string,
+  zone: string,
+): Pick<
+  TalentProfile,
+  | "phone"
+  | "email"
+  | "experience"
+  | "specialty"
+  | "location"
+  | "operations"
+  | "rating"
+  | "responseTime"
+  | "availabilitySchedule"
+  | "history"
+> => ({
+  phone: `+52 998 555 ${String(142 + index).padStart(4, "0")}`,
+  email: `${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ".")
+    .replace(/^\.|\.$/g, "")}@demo-yrm.com`,
+  experience: `${3 + (index % 6)} años`,
+  specialty: `${category} · Hospitalidad premium · Eventos privados`,
+  location: `${zone}, Quintana Roo`,
+  operations: 8 + index * 2,
+  rating: Number((4.7 + (index % 3) * 0.1).toFixed(1)),
+  responseTime: `~${12 + (index % 4) * 3} min`,
+  availabilitySchedule: [
+    { date: "Hoy", status: "Disponible" },
+    { date: "18 sep", status: "Disponible" },
+    { date: "19 sep", status: index % 2 ? "Por confirmar" : "Asignada" },
+    { date: "20 sep", status: "Por confirmar" },
+  ],
+  history: [
+    {
+      id: `#YRM-${3088 - index}`,
+      service: "Azimut 55",
+      date: "02 sep",
+      status: "Completada",
+    },
+    {
+      id: `#YRM-${3051 - index}`,
+      service: "Villa Ka'an",
+      date: "24 ago",
+      status: "Completada",
+    },
+    {
+      id: `#YRM-${3014 - index}`,
+      service: "Sunseeker 60",
+      date: "11 ago",
+      status: "Completada",
+    },
+  ],
+});
+
 export const talent: TalentProfile[] = [
   {
     id: "sofia-arenas",
@@ -245,6 +302,7 @@ export const talent: TalentProfile[] = [
     availability: "Disponible",
     image: "/demo/talent-woman-1.jpg",
     notes: "Experiencia en hospitalidad premium.",
+    ...talentDetails(0, "Sofía Arenas", "Hostess", "Cancún"),
   },
   {
     id: "maya-sound",
@@ -258,6 +316,7 @@ export const talent: TalentProfile[] = [
     availability: "Por confirmar",
     image: "/demo/talent-woman-1.jpg",
     notes: "House, lounge y eventos privados.",
+    ...talentDetails(1, "Maya Sound", "DJ", "Riviera Maya"),
   },
   {
     id: "carlos-chef",
@@ -272,6 +331,7 @@ export const talent: TalentProfile[] = [
     availability: "Disponible",
     image: "/demo/talent-woman-1.jpg",
     notes: "Menús contemporáneos y cocina mexicana.",
+    ...talentDetails(2, "Chef Carlos", "Chef", "Tulum"),
   },
   {
     id: "leo-visuals",
@@ -285,6 +345,7 @@ export const talent: TalentProfile[] = [
     availability: "Asignado",
     image: "/demo/talent-man.jpg",
     notes: "Lifestyle, yates y contenido social.",
+    ...talentDetails(3, "Leo Visuals", "Fotógrafo", "Cancún"),
   },
 ];
 export const initialQuoteItems: QuoteItem[] = [
@@ -790,6 +851,7 @@ people.forEach(([id, name, category, zone, availability], i) =>
           : "/demo/talent-woman-2.jpg"
         : "/demo/talent-man.jpg",
     notes: "Perfil profesional para hospitalidad y eventos premium.",
+    ...talentDetails(i + 4, name, category, zone),
   }),
 );
 
@@ -813,6 +875,7 @@ people.forEach(([id, name, category, zone, availability], i) =>
     image: i % 2 ? "/demo/talent-woman-1.jpg" : "/demo/talent-woman-2.jpg",
     notes:
       "Hospitalidad, recepción y atención de invitados en eventos premium.",
+    ...talentDetails(i + 16, name, "Hostess", "Cancún"),
   }),
 );
 

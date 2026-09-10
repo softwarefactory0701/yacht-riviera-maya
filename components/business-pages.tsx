@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertTriangle,
   ArrowUpRight,
@@ -17,9 +18,15 @@ import {
   Search,
   Send,
   Users,
+  X,
 } from "lucide-react";
 import { Bars, Filters, Header, Modal, Page, StatusBadge, Toast } from "./ui";
-import { calculateMargin, LeadStage, QuoteItem } from "@/lib/types";
+import {
+  calculateMargin,
+  LeadStage,
+  QuoteItem,
+  TalentProfile,
+} from "@/lib/types";
 import {
   catalog,
   demoOperations,
@@ -184,7 +191,7 @@ function Home() {
             <Metric label="Leads nuevos" value="14" />
             <Metric label="Cotizaciones abiertas" value="8" />
             <Metric label="Esperando respuesta" value="4" />
-            <Metric label="Conversión" value="31%" accent />
+            <Metric label="Tasa de cierre" value="31%" accent />
           </div>
           <div className="panel money-panel">
             <Section title="Dinero · septiembre" />
@@ -334,7 +341,7 @@ function Leads() {
         <Metric label="Leads abiertos" value="14" />
         <Metric label="Cotizaciones por enviar" value="3" />
         <Metric label="Valor potencial" value="USD 68,400" />
-        <Metric label="Conversión" value="31%" accent />
+        <Metric label="Tasa de cierre" value="31%" accent />
       </div>
       <div className="lead-grid">
         {visible.map((l) => (
@@ -700,11 +707,244 @@ function Suppliers({ supplierId }: { supplierId?: string }) {
     </Page>
   );
 }
+function TalentDrawer({
+  profile,
+  onClose,
+  onSelect,
+  onRequest,
+  onContact,
+}: {
+  profile: TalentProfile | null;
+  onClose: () => void;
+  onSelect: (profile: TalentProfile) => void;
+  onRequest: (id: string) => void;
+  onContact: (message: string) => void;
+}) {
+  useEffect(() => {
+    if (!profile) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [profile, onClose]);
+
+  return (
+    <AnimatePresence>
+      {profile && (
+        <div className="talent-drawer-layer">
+          <motion.button
+            className="talent-drawer-overlay"
+            aria-label="Cerrar perfil"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.aside
+            className="talent-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Perfil de ${profile.name}`}
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "100%", opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="talent-drawer-scroll">
+              <header className="talent-profile-hero">
+                <Image
+                  src={profile.image}
+                  alt={profile.name}
+                  fill
+                  sizes="620px"
+                />
+                <div className="talent-profile-shade" />
+                <button
+                  className="talent-drawer-close"
+                  onClick={onClose}
+                  aria-label="Cerrar"
+                >
+                  <X />
+                </button>
+                <div className="talent-profile-title">
+                  <StatusBadge>{profile.availability}</StatusBadge>
+                  <h2>{profile.name}</h2>
+                  <p>
+                    {profile.category} · {profile.zone}
+                  </p>
+                  <span>{profile.languages.join(" · ")}</span>
+                </div>
+              </header>
+
+              <div className="talent-profile-body">
+                <div className="talent-quick-metrics">
+                  <Metric
+                    label="Operaciones"
+                    value={String(profile.operations)}
+                  />
+                  <Metric
+                    label="Rating interno"
+                    value={profile.rating.toFixed(1)}
+                  />
+                  <Metric label="Respuesta" value={profile.responseTime} />
+                </div>
+
+                <section className="talent-profile-section">
+                  <Section title="Perfil profesional" />
+                  <dl className="talent-detail-list">
+                    <div>
+                      <dt>Categoría</dt>
+                      <dd>{profile.category}</dd>
+                    </div>
+                    <div>
+                      <dt>Zona</dt>
+                      <dd>{profile.zone} / Riviera Maya</dd>
+                    </div>
+                    <div>
+                      <dt>Idiomas</dt>
+                      <dd>{profile.languages.join(" · ")}</dd>
+                    </div>
+                    <div>
+                      <dt>Experiencia</dt>
+                      <dd>{profile.experience}</dd>
+                    </div>
+                    <div className="wide">
+                      <dt>Especialidad</dt>
+                      <dd>{profile.specialty}</dd>
+                    </div>
+                    <div>
+                      <dt>Disponibilidad actual</dt>
+                      <dd>{profile.availability}</dd>
+                    </div>
+                    <div>
+                      <dt>Proveedor / Agencia</dt>
+                      <dd>{profile.agency ?? profile.contact}</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                <section className="talent-profile-section talent-contact-card">
+                  <Section title="Contacto" aside="INFORMACIÓN INTERNA" />
+                  <dl className="talent-detail-list">
+                    <div>
+                      <dt>Teléfono / WhatsApp</dt>
+                      <dd>{profile.phone}</dd>
+                    </div>
+                    <div>
+                      <dt>Email</dt>
+                      <dd>{profile.email}</dd>
+                    </div>
+                    <div className="wide">
+                      <dt>Ubicación</dt>
+                      <dd>{profile.location}</dd>
+                    </div>
+                  </dl>
+                  <div className="talent-inline-actions">
+                    <button
+                      onClick={() => onContact("Mensaje de WhatsApp preparado")}
+                    >
+                      <MessageCircle /> WhatsApp
+                    </button>
+                    <button onClick={() => onContact("Contacto preparado")}>
+                      <Mail /> Contactar
+                    </button>
+                  </div>
+                </section>
+
+                <section className="talent-profile-section">
+                  <Section title="Tarifas" aside="USO INTERNO" />
+                  <div className="talent-rates">
+                    <Metric label="Costo proveedor" value={usd(profile.cost)} />
+                    <Metric
+                      label="Venta sugerida"
+                      value={usd(profile.salePrice)}
+                    />
+                    <Metric
+                      label="Margen YRM"
+                      value={usd(profile.salePrice - profile.cost)}
+                    />
+                    <Metric
+                      label="Margen %"
+                      value={`${(((profile.salePrice - profile.cost) / profile.salePrice) * 100).toFixed(1)}%`}
+                    />
+                  </div>
+                </section>
+
+                <section className="talent-profile-section">
+                  <Section title="Disponibilidad" />
+                  <div className="talent-availability-list">
+                    {profile.availabilitySchedule.map((item) => (
+                      <div key={item.date}>
+                        <b>{item.date}</b>
+                        <StatusBadge>{item.status}</StatusBadge>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="talent-profile-section">
+                  <Section
+                    title="Notas internas"
+                    aside="NO VISIBLE PARA CLIENTES"
+                  />
+                  <p className="talent-notes">
+                    {profile.notes} Inglés fluido. Preferencia por servicios con
+                    confirmación mínima de 24 h.
+                  </p>
+                </section>
+
+                <section className="talent-profile-section">
+                  <Section title="Últimas operaciones" />
+                  <div className="talent-history">
+                    {profile.history.map((item) => (
+                      <div key={item.id}>
+                        <b>{item.id}</b>
+                        <span>
+                          {item.service} · {item.date}
+                        </span>
+                        <StatusBadge>{item.status}</StatusBadge>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </div>
+            <footer className="talent-drawer-actions">
+              <button className="btn" onClick={() => onSelect(profile)}>
+                Seleccionar para cotización
+              </button>
+              <button
+                className="btn secondary"
+                disabled={profile.availability === "Solicitud enviada"}
+                onClick={() => onRequest(profile.id)}
+              >
+                {profile.availability === "Solicitud enviada"
+                  ? "Solicitud enviada"
+                  : "Solicitar disponibilidad"}
+              </button>
+            </footer>
+          </motion.aside>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function Talent() {
   const [cat, setCat] = useState("Hostess"),
     [availability, setAvailability] = useState("Todos"),
-    [data, setData] = useState(seedTalent);
+    [data, setData] = useState(seedTalent),
+    [openProfileId, setOpenProfileId] = useState<string | null>(null),
+    [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
   const feedback = useFeedback();
+  const openProfile =
+    data.find((profile) => profile.id === openProfileId) ?? null;
   const request = (id: string) => {
     setData((a) =>
       a.map((t) =>
@@ -749,6 +989,16 @@ function Talent() {
         />
       </div>
       <Toast message={feedback.message} />
+      <TalentDrawer
+        profile={openProfile}
+        onClose={() => setOpenProfileId(null)}
+        onRequest={request}
+        onContact={feedback.notify}
+        onSelect={(profile) => {
+          setSelectedProfileId(profile.id);
+          feedback.notify("Perfil seleccionado");
+        }}
+      />
       {cat === "Hostess" && availability === "Todos" && (
         <p className="talent-result-summary">
           <b>10 perfiles encontrados</b> · 6 disponibles · 2 por confirmar · 2
@@ -783,17 +1033,19 @@ function Talent() {
                 </div>
                 <p>{t.notes}</p>
                 <div className="talent-actions">
-                  <button
-                    onClick={() =>
-                      feedback.notify(`Perfil de ${t.name} abierto`)
-                    }
-                  >
+                  <button onClick={() => setOpenProfileId(t.id)}>
                     Ver perfil
                   </button>
                   <button
-                    onClick={() => feedback.notify(`${t.name} seleccionado`)}
+                    aria-pressed={selectedProfileId === t.id}
+                    onClick={() => {
+                      setSelectedProfileId(t.id);
+                      feedback.notify("Perfil seleccionado");
+                    }}
                   >
-                    Seleccionar
+                    {selectedProfileId === t.id
+                      ? "Seleccionado"
+                      : "Seleccionar"}
                   </button>
                   <button
                     className="btn secondary"
@@ -1454,7 +1706,7 @@ function ClientDetail() {
         <Metric label="Margen generado" value="USD 13,400" accent />
         <Metric label="Reservas" value="9" />
         <Metric label="Último contacto" value="Hace 3 días" />
-        <Metric label="Conversión" value="64%" />
+        <Metric label="Tasa de cierre" value="64%" />
       </section>
       <div className="two-col">
         <section className="panel">
@@ -1699,7 +1951,7 @@ function Team() {
               <Metric label="Leads atendidos" value={String(p.leads)} />
               <Metric label="Cotizaciones" value={String(p.quotes)} />
               <Metric label="Reservas" value={String(p.bookings)} />
-              <Metric label="Conversión" value={`${p.conversion}%`} />
+              <Metric label="Tasa de cierre" value={`${p.conversion}%`} />
               <Metric label="Ventas" value={usd(p.sales)} />
               <Metric label="Margen generado" value={usd(p.margin)} accent />
             </div>

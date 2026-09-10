@@ -1647,6 +1647,53 @@ a {
   }
 }
 
+@media (max-width: 700px) {
+  .talent-drawer {
+    width: 100vw;
+  }
+  .talent-profile-hero {
+    min-height: 330px;
+  }
+  .talent-profile-title {
+    right: 22px;
+    bottom: 24px;
+    left: 22px;
+  }
+  .talent-profile-body {
+    padding: 24px 20px 34px;
+  }
+  .talent-quick-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .talent-quick-metrics .metric {
+    padding: 13px 10px;
+  }
+  .talent-quick-metrics .metric strong {
+    font-size: 16px;
+  }
+  .talent-detail-list {
+    gap: 18px 16px;
+  }
+  .talent-contact-card {
+    padding: 19px;
+  }
+  .talent-history > div {
+    grid-template-columns: 78px 1fr;
+    padding-block: 9px;
+  }
+  .talent-history .status {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .talent-drawer-actions {
+    grid-template-columns: 1fr;
+    padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  }
+  .talent-drawer-actions .btn {
+    min-height: 46px;
+  }
+}
+
 /* Yacht RM brand layer */
 html,
 body {
@@ -2391,6 +2438,232 @@ textarea:focus-visible {
 }
 .talent-card button:disabled {
   opacity: 0.65;
+}
+.talent-card button[aria-pressed="true"] {
+  color: var(--yrm-riviera);
+}
+.talent-drawer-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+.talent-drawer-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(1, 8, 18, 0.74);
+  backdrop-filter: blur(7px);
+  cursor: default;
+}
+.talent-drawer {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: min(600px, 92vw);
+  height: 100dvh;
+  background: var(--yrm-navy);
+  border-left: 1px solid var(--yrm-border);
+  box-shadow: -30px 0 70px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+.talent-drawer-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.talent-profile-hero {
+  position: relative;
+  min-height: 390px;
+  overflow: hidden;
+}
+.talent-profile-hero > img {
+  object-fit: cover;
+  object-position: center 22%;
+}
+.talent-profile-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 13, 27, 0.1) 25%,
+    rgba(3, 13, 27, 0.96) 100%
+  );
+}
+.talent-drawer-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: white;
+  background: rgba(3, 13, 27, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+}
+.talent-drawer-close svg {
+  width: 20px;
+}
+.talent-profile-title {
+  position: absolute;
+  right: 34px;
+  bottom: 30px;
+  left: 34px;
+}
+.talent-profile-title h2 {
+  margin: 12px 0 5px;
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 52px);
+  line-height: 1;
+}
+.talent-profile-title p {
+  margin: 0 0 7px;
+  color: var(--yrm-white);
+  font-size: 16px;
+}
+.talent-profile-title > span:last-child {
+  color: var(--yrm-mist);
+  font-size: 14px;
+}
+.talent-profile-body {
+  padding: 30px 34px 42px;
+}
+.talent-quick-metrics,
+.talent-rates {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--yrm-border);
+}
+.talent-quick-metrics .metric,
+.talent-rates .metric {
+  padding: 17px;
+  border-right: 1px solid var(--yrm-border);
+}
+.talent-quick-metrics .metric:last-child,
+.talent-rates .metric:last-child {
+  border-right: 0;
+}
+.talent-quick-metrics .metric strong,
+.talent-rates .metric strong {
+  font-size: 18px;
+}
+.talent-profile-section {
+  margin-top: 34px;
+}
+.talent-profile-section .section-title {
+  margin-bottom: 17px;
+}
+.talent-profile-section .section-title h2 {
+  font-size: 18px;
+}
+.talent-detail-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+  margin: 0;
+}
+.talent-detail-list div.wide {
+  grid-column: 1 / -1;
+}
+.talent-detail-list dt {
+  margin-bottom: 5px;
+  color: var(--yrm-steel);
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.talent-detail-list dd {
+  margin: 0;
+  color: var(--yrm-white);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.talent-contact-card {
+  padding: 22px;
+  background: rgba(19, 48, 78, 0.58);
+  border: 1px solid var(--yrm-border);
+}
+.talent-inline-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 21px;
+}
+.talent-inline-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  color: var(--yrm-white);
+  border: 1px solid var(--yrm-riviera);
+  background: transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+}
+.talent-inline-actions svg {
+  width: 16px;
+}
+.talent-rates {
+  grid-template-columns: repeat(2, 1fr);
+}
+.talent-rates .metric:nth-child(2) {
+  border-right: 0;
+}
+.talent-rates .metric:nth-child(-n + 2) {
+  border-bottom: 1px solid var(--yrm-border);
+}
+.talent-availability-list,
+.talent-history {
+  border-top: 1px solid var(--yrm-border);
+}
+.talent-availability-list > div,
+.talent-history > div {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  border-bottom: 1px solid var(--yrm-border);
+}
+.talent-availability-list > div {
+  grid-template-columns: 1fr auto;
+}
+.talent-availability-list b,
+.talent-history b {
+  font-size: 13px;
+}
+.talent-notes {
+  color: var(--yrm-mist);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.talent-history > div {
+  grid-template-columns: 92px 1fr auto;
+}
+.talent-history span {
+  color: var(--yrm-mist);
+  font-size: 13px;
+}
+.talent-drawer-actions {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 10px;
+  padding: 18px 24px;
+  background: rgba(3, 14, 29, 0.98);
+  border-top: 1px solid var(--yrm-border);
+}
+.talent-drawer-actions .btn {
+  min-height: 50px;
+  padding-inline: 15px;
+  font-size: 9px;
+}
+.talent-drawer-actions .btn:disabled {
+  opacity: 0.58;
 }
 .quote-client {
   display: grid;
