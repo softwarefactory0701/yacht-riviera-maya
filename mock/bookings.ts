@@ -1,0 +1,43 @@
+import { Booking } from "@/lib/types";
+export const bookings: Booking[] = [
+  {
+    id: "YRM-2941",
+    client: "Roberto Hernández",
+    asset: "Azimut 55",
+    date: "12 sep 2026",
+    time: "14:00—20:00",
+    value: 61800,
+    payment: "50% pagado",
+    status: "Confirmed",
+  },
+  {
+    id: "YRM-2938",
+    client: "Sofía Laurent",
+    asset: "Villa Ocean",
+    date: "7–11 sep",
+    time: "4 nights",
+    value: 148000,
+    payment: "Pagado",
+    status: "In Progress",
+  },
+  {
+    id: "YRM-2934",
+    client: "Daniel Ross",
+    asset: "Sunseeker 60",
+    date: "14 sep 2026",
+    time: "11:00—19:00",
+    value: 74500,
+    payment: "Pendiente",
+    status: "Pending",
+  },
+  {
+    id: "YRM-2926",
+    client: "Grupo Alba",
+    asset: "Mercedes G63",
+    date: "6–9 sep",
+    time: "3 días",
+    value: 42000,
+    payment: "Pagado",
+    status: "Completed",
+  },
+];

@@ -1,0 +1,43 @@
+import { Client } from "@/lib/types";
+export const clients: Client[] = [
+  {
+    id: "roberto-hernandez",
+    name: "Roberto Hernández",
+    type: "VIP",
+    location: "Mexico City",
+    ltv: 428500,
+    bookings: 9,
+    last: "Azimut 55 · 22 ago",
+    preferred: "Marine",
+  },
+  {
+    id: "sofia-laurent",
+    name: "Sofía Laurent",
+    type: "Returning",
+    location: "Monterrey",
+    ltv: 218400,
+    bookings: 5,
+    last: "Villa Ocean · 16 ago",
+    preferred: "Stays",
+  },
+  {
+    id: "grupo-alba",
+    name: "Grupo Alba",
+    type: "Corporate",
+    location: "Mexico City",
+    ltv: 684000,
+    bookings: 12,
+    last: "Sunseeker 60 · 29 jul",
+    preferred: "Marine",
+  },
+  {
+    id: "daniel-ross",
+    name: "Daniel Ross",
+    type: "New",
+    location: "Austin",
+    ltv: 61800,
+    bookings: 1,
+    last: "Azimut 55 · 12 sep",
+    preferred: "Marine",
+  },
+];

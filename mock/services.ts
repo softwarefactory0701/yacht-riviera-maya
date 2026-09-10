@@ -1,0 +1,66 @@
+import { Service } from "@/lib/types";
+export const services: Service[] = [
+  {
+    name: "Private Chef",
+    available: true,
+    provider: "Casa Fuego",
+    cost: 3900,
+    price: 6500,
+  },
+  {
+    name: "DJ",
+    available: true,
+    provider: "Maya Sound",
+    cost: 2800,
+    price: 5000,
+  },
+  {
+    name: "Premium Bar",
+    available: true,
+    provider: "Reserva 21",
+    cost: 2600,
+    price: 4800,
+  },
+  {
+    name: "Private Transportation",
+    available: true,
+    provider: "Blacklane MX",
+    cost: 2300,
+    price: 4000,
+  },
+  {
+    name: "Decoration",
+    available: true,
+    provider: "Aura Events",
+    cost: 1900,
+    price: 3500,
+  },
+  {
+    name: "Photographer",
+    available: false,
+    provider: "Solis Studio",
+    cost: 3000,
+    price: 5200,
+  },
+  {
+    name: "Security",
+    available: true,
+    provider: "Shield MX",
+    cost: 2400,
+    price: 4100,
+  },
+  {
+    name: "Catering",
+    available: true,
+    provider: "Casa Fuego",
+    cost: 5200,
+    price: 8500,
+  },
+  {
+    name: "Beach Club",
+    available: true,
+    provider: "Maroma",
+    cost: 4800,
+    price: 7000,
+  },
+];
