@@ -1335,6 +1335,316 @@
   z-index: 2;
   left: 20px;
 }
+
+/* Multi-destination OS */
+.os-destination-selector {
+  position: relative;
+}
+.os-destination-selector > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  padding: 7px 11px;
+  color: var(--yrm-white);
+  background: rgba(11, 31, 51, 0.75);
+  border: 1px solid var(--yrm-border);
+  text-align: left;
+}
+.os-destination-selector > button > svg:first-child {
+  width: 16px;
+  color: var(--yrm-riviera);
+}
+.os-destination-selector > button > svg:last-child {
+  width: 14px;
+  margin-left: auto;
+}
+.os-destination-selector > button span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+}
+.os-destination-selector > button small {
+  color: var(--yrm-steel);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+.os-destination-selector > div {
+  position: absolute;
+  z-index: 75;
+  top: calc(100% + 8px);
+  left: 0;
+  display: grid;
+  width: 250px;
+  padding: 7px;
+  background: #071421;
+  border: 1px solid var(--yrm-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+.os-destination-selector > div button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  color: var(--yrm-mist);
+  background: none;
+  border: 0;
+  text-align: left;
+}
+.os-destination-selector > div button.active,
+.os-destination-selector > div button:hover {
+  color: white;
+  background: rgba(21, 157, 209, 0.1);
+}
+.os-destination-selector > div button span {
+  font-size: 11px;
+}
+.os-destination-selector > div button small {
+  color: var(--yrm-steel);
+  font-size: 8px;
+}
+.destination-badge {
+  display: inline-flex;
+  width: max-content;
+  margin-top: 6px;
+  padding: 4px 7px;
+  color: #9ddcf1;
+  background: rgba(21, 157, 209, 0.09);
+  border: 1px solid rgba(50, 197, 244, 0.2);
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.destination-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 7px 0;
+}
+.global-kpis,
+.branch-kpis {
+  margin-bottom: 40px;
+}
+.branch-performance {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 36px;
+}
+.branch-performance article {
+  padding: 24px;
+  background: rgba(10, 25, 44, 0.72);
+  border: 1px solid var(--yrm-border);
+}
+.branch-performance article > span {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--yrm-caribbean);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.branch-performance article .metric {
+  min-height: 64px;
+}
+.branch-performance article button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px 0 0;
+  color: white;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--yrm-border);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.branch-performance article button svg {
+  width: 14px;
+  color: var(--yrm-riviera);
+}
+.global-analytics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.global-analytics .bars {
+  height: 170px;
+}
+.chart-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: var(--yrm-mist);
+  font-size: 9px;
+}
+.web-lead-detail {
+  min-width: min(620px, 75vw);
+}
+.lead-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--yrm-border);
+}
+.lead-detail-grid .metric {
+  padding: 15px;
+  border-right: 1px solid var(--yrm-border);
+  border-bottom: 1px solid var(--yrm-border);
+}
+.interest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 14px 0 24px;
+}
+.interest-tags span {
+  padding: 7px 9px;
+  color: var(--yrm-mist);
+  border: 1px solid var(--yrm-border);
+  font-size: 9px;
+}
+.web-lead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.web-lead-actions button {
+  padding: 0 14px;
+  color: white;
+  background: transparent;
+  border: 1px solid var(--yrm-border);
+}
+.talent-destinations {
+  color: var(--yrm-steel) !important;
+  font-size: 9px !important;
+}
+.client-journey {
+  margin: 28px 0;
+}
+.client-journey > div:last-child {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.client-journey article {
+  display: grid;
+  gap: 7px;
+  padding: 20px;
+  border-right: 1px solid var(--yrm-border);
+}
+.client-journey article b,
+.client-journey article span {
+  color: var(--yrm-steel);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+.client-journey article strong {
+  font: 500 20px "Cormorant Garamond";
+}
+.client-journey article em {
+  color: var(--yrm-caribbean);
+  font-style: normal;
+  font-size: 12px;
+}
+.finance-destinations {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.finance-destinations article {
+  display: grid;
+  gap: 8px;
+  padding: 22px;
+  border: 1px solid var(--yrm-border);
+  background: rgba(10, 25, 44, 0.6);
+}
+.finance-destinations span {
+  color: var(--yrm-mist);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.finance-destinations b {
+  font: 500 27px "Cormorant Garamond";
+}
+.finance-destinations small {
+  color: var(--yrm-steel);
+}
+.settings-destinations {
+  grid-column: 1/-1;
+}
+.settings-destinations > button:not(.btn) {
+  display: grid;
+  grid-template-columns: 22px 1fr auto 16px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 64px;
+  color: white;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--yrm-border);
+  text-align: left;
+}
+.settings-destinations > button svg {
+  width: 16px;
+  color: var(--yrm-riviera);
+}
+.settings-destinations > button span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.settings-destinations > button small {
+  color: var(--yrm-steel);
+  font-size: 9px;
+}
+.settings-destinations > .btn {
+  margin-top: 18px;
+}
+.branch-detail {
+  min-width: min(560px, 75vw);
+}
+.quote-client {
+  grid-template-columns: 1fr 0.8fr 1fr 0.5fr auto;
+}
+
+@media (max-width: 760px) {
+  .os-destination-selector > button {
+    min-width: 0;
+    width: 172px;
+  }
+  .os-destination-selector > div {
+    width: 220px;
+  }
+  .branch-performance,
+  .finance-destinations {
+    grid-template-columns: 1fr;
+  }
+  .global-analytics {
+    grid-template-columns: 1fr;
+  }
+  .client-journey > div:last-child {
+    grid-template-columns: 1fr;
+  }
+  .client-journey article {
+    border-right: 0;
+    border-bottom: 1px solid var(--yrm-border);
+  }
+  .web-lead-detail,
+  .branch-detail {
+    min-width: 0;
+  }
+  .quote-client {
+    grid-template-columns: 1fr;
+  }
+}
 .dining-recommendations b {
   bottom: 48px;
   font: 500 26px "Cormorant Garamond";

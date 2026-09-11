@@ -28,6 +28,8 @@ import {
   Handshake,
   Sparkles,
   LogOut,
+  Globe2,
+  ChevronDown,
 } from "lucide-react";
 import { BusinessPage } from "./business-pages";
 import { Page, Header, StatusBadge, Filters, Modal, Bars, money } from "./ui";
@@ -36,6 +38,12 @@ import { clients } from "@/mock/clients";
 import { bookings } from "@/mock/bookings";
 import { services } from "@/mock/services";
 import { team } from "@/mock/team";
+import {
+  BranchId,
+  branches,
+  DestinationProvider,
+  useDestination,
+} from "@/lib/destination-context";
 const serviceLabel: Record<string, string> = {
   "Private Chef": "Chef privado",
   "Premium Bar": "Barra premium",
@@ -93,6 +101,7 @@ export function Dashboard({ path }: { path: string }) {
   }, [router]);
   const logout = () => {
     sessionStorage.removeItem("yrm-demo-session");
+    sessionStorage.removeItem("yrm-active-destination");
     router.push("/login");
   };
   if (!sessionReady)
@@ -103,133 +112,173 @@ export function Dashboard({ path }: { path: string }) {
       </div>
     );
   return (
-    <div className="shell">
-      <aside className={open ? "sidebar open" : "sidebar"}>
-        <div className="brand">
-          <div>
-            YACHT<strong>RIVIERA MAYA</strong>
+    <DestinationProvider>
+      <div className="shell">
+        <aside className={open ? "sidebar open" : "sidebar"}>
+          <div className="brand">
+            <div>
+              YACHT<strong>RIVIERA MAYA</strong>
+            </div>
           </div>
-        </div>
-        <button className="close" onClick={() => setOpen(false)}>
-          <X />
-        </button>
-        {nav.map((g) => (
-          <nav key={g.label}>
-            <small>{g.label}</small>
-            {g.items.map(([n, p, I]) => (
-              <Link
-                key={p}
-                href={p}
-                onClick={() => setOpen(false)}
-                className={
-                  pathname === p || pathname.startsWith(p + "/")
-                    ? "current"
-                    : ""
-                }
-              >
-                <I size={17} />
-                {n}
-              </Link>
-            ))}
-          </nav>
-        ))}
-        <Link href="/quotes" className="new-quote">
-          <Plus size={16} /> Crear cotización
-        </Link>
-        <button className="user" onClick={logout} title="Cerrar sesión">
-          <span>AR</span>
-          <div>
-            Andrea Reyes<small>Operaciones</small>
-          </div>
-          <LogOut className="logout-icon" />
-        </button>
-      </aside>
-      <section className="workspace">
-        <div className="topbar">
-          <button className="mobile-menu" onClick={() => setOpen(true)}>
-            <Menu />
+          <button className="close" onClick={() => setOpen(false)}>
+            <X />
           </button>
-          <span>Yacht Riviera Maya · Operaciones &amp; Concierge</span>
-          <div>
-            <button
-              className="quick-search"
-              aria-label="Buscar"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search size={18} />
+          {nav.map((g) => (
+            <nav key={g.label}>
+              <small>{g.label}</small>
+              {g.items.map(([n, p, I]) => (
+                <Link
+                  key={p}
+                  href={p}
+                  onClick={() => setOpen(false)}
+                  className={
+                    pathname === p || pathname.startsWith(p + "/")
+                      ? "current"
+                      : ""
+                  }
+                >
+                  <I size={17} />
+                  {n}
+                </Link>
+              ))}
+            </nav>
+          ))}
+          <Link href="/quotes" className="new-quote">
+            <Plus size={16} /> Crear cotización
+          </Link>
+          <button className="user" onClick={logout} title="Cerrar sesión">
+            <span>AR</span>
+            <div>
+              Andrea Reyes<small>Operaciones</small>
+            </div>
+            <LogOut className="logout-icon" />
+          </button>
+        </aside>
+        <section className="workspace">
+          <div className="topbar">
+            <button className="mobile-menu" onClick={() => setOpen(true)}>
+              <Menu />
             </button>
-            <Bell size={18} />
-            <i className="live" /> En línea
+            <DestinationSelector />
+            <div>
+              <button
+                className="quick-search"
+                aria-label="Buscar"
+                onClick={() => setSearchOpen(true)}
+              >
+                <Search size={18} />
+              </button>
+              <Bell size={18} />
+              <i className="live" /> En línea
+            </div>
           </div>
+          {render(path)}
+          <Modal open={searchOpen} onClose={() => setSearchOpen(false)}>
+            <div className="search-dialog">
+              <span className="eyebrow">ACCESO RÁPIDO</span>
+              <h2>Buscar en Yacht RM</h2>
+              <label>
+                <Search />
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Cliente, cotización, reserva o proveedor"
+                />
+              </label>
+              {query.trim() && (
+                <div className="search-results">
+                  {[
+                    {
+                      label: "Roberto Hernández",
+                      kind: "Cliente",
+                      href: "/clients/roberto-hernandez",
+                    },
+                    {
+                      label: "#YRM-3094",
+                      kind: "Operación · Roberto Hernández",
+                      href: "/bookings/YRM-3094",
+                    },
+                    {
+                      label: "#YRM-Q4021",
+                      kind: "Cotización · seguimiento pendiente",
+                      href: "/quotes",
+                    },
+                    {
+                      label: "Riviera Luxury Charters",
+                      kind: "Proveedor",
+                      href: "/suppliers",
+                    },
+                    {
+                      label: "Azimut 55",
+                      kind: "Servicio",
+                      href: "/fleet/azimut-55",
+                    },
+                  ]
+                    .filter(
+                      (item) =>
+                        `${item.label} ${item.kind}`
+                          .toLowerCase()
+                          .includes(query.toLowerCase()) ||
+                        query.toLowerCase().includes("roberto"),
+                    )
+                    .map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setSearchOpen(false)}
+                      >
+                        <span>
+                          {item.label}
+                          <small>{item.kind}</small>
+                        </span>
+                        <ChevronRight />
+                      </Link>
+                    ))}
+                </div>
+              )}
+            </div>
+          </Modal>
+        </section>
+      </div>
+    </DestinationProvider>
+  );
+}
+
+function DestinationSelector() {
+  const { activeBranch, setActiveId } = useDestination();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="os-destination-selector">
+      <button onClick={() => setOpen((value) => !value)} aria-expanded={open}>
+        <Globe2 />
+        <span>
+          <small>CONTEXTO ACTUAL</small>
+          {activeBranch.name}
+        </span>
+        <ChevronDown />
+      </button>
+      {open && (
+        <div>
+          {branches.map((branch) => (
+            <button
+              key={branch.id}
+              className={activeBranch.id === branch.id ? "active" : ""}
+              onClick={() => {
+                setActiveId(branch.id as BranchId);
+                setOpen(false);
+              }}
+            >
+              <span>{branch.shortName}</span>
+              <small>
+                {branch.type === "global"
+                  ? "Todas las sucursales"
+                  : "Sucursal activa"}
+              </small>
+            </button>
+          ))}
         </div>
-        {render(path)}
-        <Modal open={searchOpen} onClose={() => setSearchOpen(false)}>
-          <div className="search-dialog">
-            <span className="eyebrow">ACCESO RÁPIDO</span>
-            <h2>Buscar en Yacht RM</h2>
-            <label>
-              <Search />
-              <input
-                autoFocus
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Cliente, cotización, reserva o proveedor"
-              />
-            </label>
-            {query.trim() && (
-              <div className="search-results">
-                {[
-                  {
-                    label: "Roberto Hernández",
-                    kind: "Cliente",
-                    href: "/clients/roberto-hernandez",
-                  },
-                  {
-                    label: "#YRM-3094",
-                    kind: "Operación · Roberto Hernández",
-                    href: "/bookings/YRM-3094",
-                  },
-                  {
-                    label: "#YRM-Q4021",
-                    kind: "Cotización · seguimiento pendiente",
-                    href: "/quotes",
-                  },
-                  {
-                    label: "Riviera Luxury Charters",
-                    kind: "Proveedor",
-                    href: "/suppliers",
-                  },
-                  {
-                    label: "Azimut 55",
-                    kind: "Servicio",
-                    href: "/fleet/azimut-55",
-                  },
-                ]
-                  .filter(
-                    (item) =>
-                      `${item.label} ${item.kind}`
-                        .toLowerCase()
-                        .includes(query.toLowerCase()) ||
-                      query.toLowerCase().includes("roberto"),
-                  )
-                  .map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setSearchOpen(false)}
-                    >
-                      <span>
-                        {item.label}
-                        <small>{item.kind}</small>
-                      </span>
-                      <ChevronRight />
-                    </Link>
-                  ))}
-              </div>
-            )}
-          </div>
-        </Modal>
-      </section>
+      )}
     </div>
   );
 }
@@ -1413,10 +1462,37 @@ function Team() {
 }
 function SettingsPage() {
   const [notif, setNotif] = useState({ email: true, whatsapp: false });
+  const [branchDetail, setBranchDetail] = useState<BranchId | null>(null);
+  const { setActiveId } = useDestination();
   return (
     <Page>
       <Header eyebrow="PREFERENCIAS DEL SISTEMA" title="Configuración" />
       <div className="settings-grid">
+        <section className="panel settings-destinations">
+          <SectionTitle title="Destinos" />
+          {branches
+            .filter((branch) => branch.type === "branch")
+            .map((branch) => (
+              <button
+                key={branch.id}
+                onClick={() => setBranchDetail(branch.id)}
+              >
+                <MapPin />
+                <span>
+                  <b>{branch.name}</b>
+                  <small>{branch.country} · Active</small>
+                </span>
+                <StatusBadge>Active</StatusBadge>
+                <ChevronRight />
+              </button>
+            ))}
+          <button
+            className="btn secondary"
+            onClick={() => setBranchDetail("global")}
+          >
+            <Plus /> Add Destination
+          </button>
+        </section>
         <section className="panel">
           <SectionTitle title="Empresa" />
           <label>
@@ -1483,6 +1559,63 @@ function SettingsPage() {
           ))}
         </section>
       </div>
+      <Modal open={!!branchDetail} onClose={() => setBranchDetail(null)}>
+        {branchDetail === "global" ? (
+          <div>
+            <span className="eyebrow">DEMO ACTION</span>
+            <h2>Agregar destino</h2>
+            <p>
+              El alta estará disponible cuando se conecte la configuración
+              operativa.
+            </p>
+            <button className="btn wide" onClick={() => setBranchDetail(null)}>
+              Entendido
+            </button>
+          </div>
+        ) : (
+          branchDetail && (
+            <div className="branch-detail">
+              <span className="eyebrow">DESTINATION DETAIL</span>
+              <h2>
+                {branches.find((branch) => branch.id === branchDetail)?.name}
+              </h2>
+              <div className="lead-detail-grid">
+                <Metric label="Status" value="Active" />
+                <Metric label="Currency" value="USD" />
+                <Metric
+                  label="Timezone"
+                  value={
+                    branches.find((branch) => branch.id === branchDetail)
+                      ?.timezone ?? ""
+                  }
+                />
+                <Metric label="Services" value="42" />
+                <Metric label="Suppliers" value="18" />
+                <Metric label="Team" value="6" />
+                <Metric
+                  label="Operations this month"
+                  value={
+                    branchDetail === "miami"
+                      ? "31"
+                      : branchDetail === "los-cabos"
+                        ? "21"
+                        : "42"
+                  }
+                />
+              </div>
+              <button
+                className="btn wide"
+                onClick={() => {
+                  setActiveId(branchDetail);
+                  setBranchDetail(null);
+                }}
+              >
+                Ver sucursal
+              </button>
+            </div>
+          )
+        )}
+      </Modal>
     </Page>
   );
 }

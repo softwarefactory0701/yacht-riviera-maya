@@ -77,6 +77,19 @@ Flujo previsto: Plan Your Stay → Lead → Trip → ejecutivo → Quote → Ser
 Booking → Operation. En esta fase todo continúa siendo una simulación local sin
 backend, disponibilidad real ni envío de información.
 
+## Contexto operativo multi-destino
+
+El OS privado utiliza un único contexto frontend para `Global`, `Riviera Maya`,
+`Miami` y `Los Cabos`. La selección se conserva durante la navegación en
+`sessionStorage` bajo `yrm-active-destination` y vuelve a Global al cerrar
+sesión. Destino representa dónde ocurre el servicio; no equivale a una oficina
+física ni limita el equipo que puede atenderlo.
+
+Los helpers de `lib/destination-context.tsx` centralizan el filtrado de
+operaciones, leads, reservas, catálogo, proveedores y talento. Clientes se
+mantiene global deliberadamente para conservar un solo historial comercial por
+persona. Esta simulación no implementa permisos, sucursales reales ni RBAC.
+
 ## Recursos
 
 Las imágenes críticas de la demo viven en `public/demo/` para evitar dependencias de red durante presentaciones. Las instrucciones para incorporar el logotipo oficial están en `public/brand/README.md`.

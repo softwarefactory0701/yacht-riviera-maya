@@ -23,6 +23,7 @@ import {
 import { Bars, Filters, Header, Modal, Page, StatusBadge, Toast } from "./ui";
 import {
   calculateMargin,
+  Lead,
   LeadStage,
   QuoteItem,
   TalentProfile,
@@ -38,6 +39,14 @@ import {
 import { bookings } from "@/mock/bookings";
 import { clients } from "@/mock/clients";
 import { team } from "@/mock/team";
+import {
+  destinationForIndex,
+  destinationName,
+  filterForBranch,
+  OperationalDestinationId,
+  operationalDestinationIds,
+  useDestination,
+} from "@/lib/destination-context";
 
 const usd = (n: number) => `USD ${Math.round(n).toLocaleString("en-US")}`;
 function Section({ title, aside }: { title: string; aside?: string }) {
@@ -94,7 +103,187 @@ export function BusinessPage(path: string) {
   if (path === "/team") return <Team />;
   return null;
 }
+const branchPerformance = {
+  "riviera-maya": {
+    sales: 184000,
+    margin: 63000,
+    operations: 42,
+    leads: 27,
+    quotes: 12,
+    collections: 24600,
+  },
+  miami: {
+    sales: 156000,
+    margin: 48000,
+    operations: 31,
+    leads: 22,
+    quotes: 10,
+    collections: 19800,
+  },
+  "los-cabos": {
+    sales: 88000,
+    margin: 26000,
+    operations: 21,
+    leads: 14,
+    quotes: 6,
+    collections: 11200,
+  },
+};
+
 function Home() {
+  const { activeId, activeBranch, setActiveId } = useDestination();
+  if (activeId === "global")
+    return (
+      <Page>
+        <Header
+          eyebrow="CENTRO DE OPERACIONES"
+          title="Yacht RM Global"
+          action={
+            <Link className="btn" href="/quotes">
+              <Plus />
+              Nueva cotización
+            </Link>
+          }
+        />
+        <p className="lede">Una sola empresa. Tres destinos operativos.</p>
+        <section className="hero-metrics global-kpis">
+          <div className="primary">
+            <small>VENTAS</small>
+            <strong>USD 428K</strong>
+            <em>consolidado</em>
+          </div>
+          <div>
+            <small>MARGEN</small>
+            <strong>USD 137K</strong>
+            <em>32% global</em>
+          </div>
+          <div>
+            <small>OPERACIONES</small>
+            <strong>94</strong>
+            <em>este mes</em>
+          </div>
+          <div>
+            <small>LEADS ACTIVOS</small>
+            <strong>63</strong>
+            <em>28 cotizaciones abiertas</em>
+          </div>
+        </section>
+        <Section title="Performance by destination" aside="SEPTIEMBRE 2026" />
+        <div className="branch-performance">
+          {operationalDestinationIds.map((id) => {
+            const value = branchPerformance[id];
+            return (
+              <article key={id}>
+                <span>{destinationName(id)}</span>
+                <Metric label="Sales" value={usd(value.sales)} />
+                <Metric label="Margin" value={usd(value.margin)} accent />
+                <Metric label="Operations" value={String(value.operations)} />
+                <button onClick={() => setActiveId(id)}>
+                  Ver sucursal <ChevronRight />
+                </button>
+              </article>
+            );
+          })}
+        </div>
+        <div className="global-analytics">
+          <section className="panel">
+            <Section title="Sales by destination" />
+            <Bars values={[92, 78, 44]} />
+            <div className="chart-legend">
+              <span>Riviera Maya · USD 184K</span>
+              <span>Miami · USD 156K</span>
+              <span>Los Cabos · USD 88K</span>
+            </div>
+          </section>
+          <section className="panel">
+            <Section title="Revenue trend" aside="ÚLTIMOS 6 MESES" />
+            <Bars values={[42, 55, 49, 68, 74, 92]} />
+            <div className="chart-legend">
+              <span>Margen global · USD 137K</span>
+              <span>94 operaciones · 63 leads</span>
+            </div>
+          </section>
+        </div>
+      </Page>
+    );
+  const value = branchPerformance[activeId];
+  return (
+    <Page>
+      <Header
+        eyebrow={activeBranch.country?.toUpperCase()}
+        title={activeBranch.name}
+        action={
+          <Link className="btn" href="/quotes">
+            <Plus />
+            Nueva cotización
+          </Link>
+        }
+      />
+      <p className="lede">
+        Operations Overview · información filtrada para {activeBranch.name}.
+      </p>
+      <section className="hero-metrics branch-kpis">
+        <div className="primary">
+          <small>VENTAS {activeBranch.shortName.toUpperCase()}</small>
+          <strong>{usd(value.sales)}</strong>
+        </div>
+        <div>
+          <small>MARGEN</small>
+          <strong>{usd(value.margin)}</strong>
+        </div>
+        <div>
+          <small>OPERACIONES ACTIVAS</small>
+          <strong>{Math.ceil(value.operations / 3)}</strong>
+        </div>
+        <div>
+          <small>LEADS / COTIZACIONES</small>
+          <strong>
+            {value.leads} / {value.quotes}
+          </strong>
+          <em>{usd(value.collections)} por cobrar</em>
+        </div>
+      </section>
+      <div className="two-col">
+        <section className="panel">
+          <Section title={`Today in ${activeBranch.name}`} />
+          <div className="doc">
+            <span>
+              {activeId === "miami"
+                ? "VanDutch 55 · James Miller"
+                : activeId === "los-cabos"
+                  ? "Sunseeker 65 · Sofia Turner"
+                  : "Azimut 55 · Roberto Hernández"}
+            </span>
+            <StatusBadge>Confirmado</StatusBadge>
+            <ChevronRight />
+          </div>
+          <div className="doc">
+            <span>Upcoming Operations · 4 servicios</span>
+            <StatusBadge>En seguimiento</StatusBadge>
+            <ChevronRight />
+          </div>
+        </section>
+        <section className="panel">
+          <Section title={`${activeBranch.name} Team`} />
+          <Metric
+            label="Equipo asignado"
+            value={
+              activeId === "miami"
+                ? "Sofía · Concierge"
+                : activeId === "los-cabos"
+                  ? "Carlos · Operations"
+                  : "Andrea · Operations"
+            }
+          />
+          <Metric label="Provider Alerts" value="2 pendientes" />
+          <Metric label="Recent Leads" value={String(value.leads)} />
+        </section>
+      </div>
+    </Page>
+  );
+}
+
+export function LegacyHome() {
   return (
     <Page>
       <Header
@@ -208,7 +397,8 @@ function Home() {
 }
 function Operations() {
   const [view, setView] = useState("Hoy");
-  const operationRows =
+  const { activeId } = useDestination();
+  const timedRows =
     view === "Hoy"
       ? demoOperations.slice(0, 3)
       : view === "Mañana"
@@ -216,6 +406,15 @@ function Operations() {
         : view === "Semana"
           ? demoOperations.slice(0, 7)
           : demoOperations;
+  const operationRows = timedRows
+    .map((operation, index) => ({
+      ...operation,
+      destinationId: destinationForIndex(index),
+    }))
+    .filter(
+      (operation) =>
+        activeId === "global" || operation.destinationId === activeId,
+    );
   return (
     <Page>
       <Header
@@ -262,6 +461,9 @@ function Operations() {
             <div>
               <small>#{o.id}</small>
               <strong>{o.client}</strong>
+              <span className="destination-badge">
+                {destinationName(o.destinationId)}
+              </span>
             </div>
             <div>
               <small>SERVICIOS</small>
@@ -303,8 +505,28 @@ function Operations() {
   );
 }
 function Leads() {
+  const { activeId } = useDestination();
   const [stage, setStage] = useState("Todos"),
-    [data, setData] = useState(seedLeads),
+    [data, setData] = useState<Lead[]>([
+      ...seedLeads,
+      {
+        id: "L-WEB-3018",
+        name: "James Miller",
+        country: "Estados Unidos",
+        phone: "+1 305 555 0188",
+        date: "12–16 nov",
+        guests: 8,
+        stay: "Miami",
+        budget: 18000,
+        interest: "Plan Your Stay",
+        source: "Web",
+        owner: "Matías",
+        lastContact: "Hace 12 min",
+        nextAction: "Revisar solicitud web",
+        stage: "Nuevo",
+        notes: "Yacht · Dining · Nightlife · Transport · Luxury Weekend",
+      },
+    ]),
     [selected, setSelected] = useState<string | null>(null);
   const feedback = useFeedback();
   const stages = [
@@ -317,7 +539,19 @@ function Leads() {
     "Confirmado",
     "Perdido",
   ];
-  const visible = data.filter((l) => stage === "Todos" || l.stage === stage);
+  const enrichedLeads = data.map((lead, index) => ({
+    ...lead,
+    destinationId:
+      lead.id === "L-WEB-3018"
+        ? ("miami" as const)
+        : destinationForIndex(index),
+  }));
+  const visible = enrichedLeads.filter(
+    (lead) =>
+      (stage === "Todos" || lead.stage === stage) &&
+      (activeId === "global" || lead.destinationId === activeId),
+  );
+  const selectedLead = enrichedLeads.find((lead) => lead.id === selected);
   const change = (id: string) => {
     setData((a) =>
       a.map((l) => (l.id === id ? { ...l, stage: nextStage(l.stage) } : l)),
@@ -351,6 +585,9 @@ function Leads() {
               <small>
                 {l.id} · {l.source}
               </small>
+              <span className="destination-badge">
+                {destinationName(l.destinationId)}
+              </span>
             </div>
             <h2>{l.name}</h2>
             <p>
@@ -368,6 +605,7 @@ function Leads() {
               <span>Último contacto {l.lastContact.toLowerCase()}</span>
             </p>
             <div className="card-actions">
+              <button onClick={() => setSelected(l.id)}>Ver detalle</button>
               <Link href="/quotes">Crear cotización</Link>
               <button onClick={() => setSelected(l.id)}>Agregar nota</button>
               <button onClick={() => change(l.id)}>Cambiar estado</button>
@@ -382,21 +620,53 @@ function Leads() {
         ))}
       </div>
       <Modal open={!!selected} onClose={() => setSelected(null)}>
-        <span className="eyebrow">NOTA INTERNA</span>
-        <h2>Agregar seguimiento</h2>
-        <textarea
-          className="note-input"
-          defaultValue="Cliente interesado. Dar seguimiento mañana."
-        />
-        <button
-          className="btn wide"
-          onClick={() => {
-            setSelected(null);
-            feedback.notify("Nota guardada");
-          }}
-        >
-          Guardar nota
-        </button>
+        {selectedLead && (
+          <div className="web-lead-detail">
+            <span className="eyebrow">
+              {selectedLead.source === "Web"
+                ? "WEB · PLAN YOUR STAY"
+                : "DETALLE DEL LEAD"}
+            </span>
+            <h2>{selectedLead.name}</h2>
+            <div className="lead-detail-grid">
+              <Metric label="Source" value={selectedLead.source} />
+              <Metric
+                label="Destination"
+                value={destinationName(selectedLead.destinationId)}
+              />
+              <Metric label="Request" value={selectedLead.interest} />
+              <Metric label="Dates" value={selectedLead.date} />
+              <Metric label="Guests" value={String(selectedLead.guests)} />
+              <Metric label="Hotel" value="TBD" />
+              <Metric
+                label="Style"
+                value={
+                  selectedLead.id === "L-WEB-3018"
+                    ? "Luxury Weekend"
+                    : "A definir"
+                }
+              />
+              <Metric label="Budget" value={usd(selectedLead.budget)} />
+            </div>
+            <Section title="Interests" />
+            <div className="interest-tags">
+              {selectedLead.notes.split(" · ").map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+            <div className="web-lead-actions">
+              <Link className="btn" href="/quotes">
+                Create Quote
+              </Link>
+              <button onClick={() => feedback.notify("Nota agregada")}>
+                Add Note
+              </button>
+              <button onClick={() => change(selectedLead.id)}>
+                Change Status
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
       <Toast message={feedback.message} />
     </Page>
@@ -416,6 +686,7 @@ function nextStage(s: LeadStage): LeadStage {
 }
 function Catalog() {
   const [f, setF] = useState("Todos");
+  const { activeId } = useDestination();
   const categories = [
     "Todos",
     "Yates",
@@ -431,9 +702,16 @@ function Catalog() {
     "Staff & Talent",
     "Otros",
   ];
-  const visibleCatalog = catalog.filter(
-    (item) => f === "Todos" || item.category === f,
-  );
+  const visibleCatalog = catalog
+    .map((item, index) => ({
+      ...item,
+      destinationId: destinationForIndex(index),
+    }))
+    .filter(
+      (item) =>
+        (f === "Todos" || item.category === f) &&
+        (activeId === "global" || item.destinationId === activeId),
+    );
   return (
     <Page>
       <Header
@@ -466,6 +744,9 @@ function Catalog() {
                 <div className="shade" />
                 <StatusBadge>{c.status}</StatusBadge>
                 <span>{c.category}</span>
+                <b className="destination-badge">
+                  {destinationName(c.destinationId)}
+                </b>
               </div>
               <div className="catalog-copy">
                 <h2>{c.name}</h2>
@@ -583,6 +864,21 @@ function ServiceDetail({ serviceId }: { serviceId: string }) {
 }
 function Suppliers({ supplierId }: { supplierId?: string }) {
   const [tab, setTab] = useState("Resumen");
+  const { activeId } = useDestination();
+  const supplierRows = suppliers.map((supplier, index) => ({
+    ...supplier,
+    destinations:
+      index === 2
+        ? (["riviera-maya", "miami"] as const)
+        : index === 1
+          ? (["riviera-maya", "los-cabos"] as const)
+          : ([destinationForIndex(index)] as const),
+  }));
+  const visibleSuppliers = filterForBranch(
+    supplierRows,
+    activeId,
+    (supplier) => [...supplier.destinations],
+  );
   const selectedSupplier =
     suppliers.find((supplier) => supplier.id === supplierId) ?? suppliers[0];
   const tabRows: Record<string, string[]> = {
@@ -617,7 +913,7 @@ function Suppliers({ supplierId }: { supplierId?: string }) {
         }
       />
       <div className="supplier-grid">
-        {suppliers.map((s, i) => (
+        {visibleSuppliers.map((s, i) => (
           <article
             className={
               i === 0 ? "supplier-card featured-supplier" : "supplier-card"
@@ -632,6 +928,13 @@ function Suppliers({ supplierId }: { supplierId?: string }) {
             <p>
               {s.contact} · {s.zone}
             </p>
+            <div className="destination-tags">
+              {s.destinations.map((id) => (
+                <span className="destination-badge" key={id}>
+                  {destinationName(id)}
+                </span>
+              ))}
+            </div>
             <div className="supplier-stats">
               <Metric label="Operaciones" value={String(s.operations)} />
               <Metric label="Monto comprado" value={usd(s.purchased)} />
@@ -937,12 +1240,21 @@ function TalentDrawer({
 }
 
 function Talent() {
+  const { activeId } = useDestination();
   const [cat, setCat] = useState("Hostess"),
     [availability, setAvailability] = useState("Todos"),
     [data, setData] = useState(seedTalent),
     [openProfileId, setOpenProfileId] = useState<string | null>(null),
     [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
   const feedback = useFeedback();
+  const talentRows = data.map((profile, index) => {
+    const baseDestination = destinationForIndex(index);
+    const availableDestinations =
+      index % 4 === 0
+        ? [baseDestination, operationalDestinationIds[(index + 1) % 3]]
+        : [baseDestination];
+    return { ...profile, baseDestination, availableDestinations };
+  });
   const openProfile =
     data.find((profile) => profile.id === openProfileId) ?? null;
   const request = (id: string) => {
@@ -1006,10 +1318,15 @@ function Talent() {
         </p>
       )}
       <div className="talent-grid">
-        {data
+        {talentRows
           .filter((t) => cat === "Todos" || t.category === cat)
           .filter(
             (t) => availability === "Todos" || t.availability === availability,
+          )
+          .filter(
+            (t) =>
+              activeId === "global" ||
+              t.availableDestinations.includes(activeId),
           )
           .map((t) => (
             <article className="talent-card" key={t.id}>
@@ -1027,6 +1344,10 @@ function Talent() {
                 </small>
                 <h2>{t.name}</h2>
                 <p>{t.languages.join(" · ")}</p>
+                <p className="talent-destinations">
+                  Base: {destinationName(t.baseDestination)} · Disponible en{" "}
+                  {t.availableDestinations.map(destinationName).join(" / ")}
+                </p>
                 <div className="rate-strip">
                   <Metric label="Costo" value={usd(t.cost)} />
                   <Metric label="Venta sugerida" value={usd(t.salePrice)} />
@@ -1061,10 +1382,11 @@ function Talent() {
             </article>
           ))}
       </div>
-      {!data.filter(
+      {!talentRows.filter(
         (t) =>
           (cat === "Todos" || t.category === cat) &&
-          (availability === "Todos" || t.availability === availability),
+          (availability === "Todos" || t.availability === availability) &&
+          (activeId === "global" || t.availableDestinations.includes(activeId)),
       ).length && (
         <div className="empty-state">
           <Search />
@@ -1084,6 +1406,10 @@ function Talent() {
   );
 }
 function Quotes() {
+  const { activeId } = useDestination();
+  const [quoteDestination, setQuoteDestination] = useState(
+    activeId === "global" ? "riviera-maya" : activeId,
+  );
   const [items, setItems] = useState<QuoteItem[]>(initialQuoteItems),
     [preview, setPreview] = useState(false);
   const feedback = useFeedback();
@@ -1138,6 +1464,24 @@ function Quotes() {
               >
                 {clients.map((client) => (
                   <option key={client.id}>{client.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <small>DESTINO</small>
+              <select
+                className="inline-select"
+                value={quoteDestination}
+                onChange={(event) =>
+                  setQuoteDestination(
+                    event.target.value as typeof quoteDestination,
+                  )
+                }
+              >
+                {operationalDestinationIds.map((id) => (
+                  <option value={id} key={id}>
+                    {destinationName(id)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -1389,6 +1733,7 @@ function Quotes() {
   );
 }
 function Bookings() {
+  const { activeId } = useDestination();
   const [filter, setFilter] = useState("Todas");
   const [statusOverrides, setStatusOverrides] = useState<
     Record<string, string>
@@ -1442,6 +1787,12 @@ function Bookings() {
       collected: Math.round(operation.sale * (index % 3 === 0 ? 1 : 0.5)),
     })),
   );
+  const destinationRows = rows
+    .map((row, index) => ({
+      ...row,
+      destinationId: destinationForIndex(index),
+    }))
+    .filter((row) => activeId === "global" || row.destinationId === activeId);
   return (
     <Page>
       <Header
@@ -1475,7 +1826,7 @@ function Bookings() {
           <span>COSTO / MARGEN</span>
           <span>OPERACIÓN</span>
         </div>
-        {rows
+        {destinationRows
           .filter(
             (r) =>
               filter === "Todas" ||
@@ -1490,6 +1841,9 @@ function Bookings() {
               <div>
                 <small>#{r.id}</small>
                 <strong>{r.client}</strong>
+                <span className="destination-badge">
+                  {destinationName(r.destinationId)}
+                </span>
               </div>
               <strong>{r.services}</strong>
               <span>{r.date}</span>
@@ -1524,7 +1878,7 @@ function Bookings() {
             </Link>
           ))}
       </div>
-      {!rows.some(
+      {!destinationRows.some(
         (r) =>
           filter === "Todas" || (statusOverrides[r.id] ?? r.status) === filter,
       ) && (
@@ -1655,7 +2009,7 @@ function Clients() {
         }
       />
       <div className="client-grid broker-clients">
-        {clients.map((c) => (
+        {clients.map((c, index) => (
           <Link href={`/clients/${c.id}`} className="client-card" key={c.id}>
             <div className="avatar">
               {c.name
@@ -1666,6 +2020,12 @@ function Clients() {
             <StatusBadge>{c.type}</StatusBadge>
             <h2>{c.name}</h2>
             <p>{c.location} · Origen: Instagram</p>
+            <div className="destination-tags">
+              <span className="destination-badge">
+                Último · {destinationName(destinationForIndex(index))}
+              </span>
+              <span className="destination-badge">CRM Global</span>
+            </div>
             <Metric
               label="Total comprado"
               value={usd(Math.round(c.ltv / 10))}
@@ -1751,6 +2111,29 @@ function ClientDetail() {
         </section>
       </div>
       <Section title="Historial" />
+      <section className="panel client-journey">
+        <Section title="Yacht RM Journey" aside="HISTORIAL GLOBAL" />
+        <div>
+          <article>
+            <b>SEP 2026</b>
+            <span>Riviera Maya</span>
+            <strong>Azimut 55 + Chef</strong>
+            <em>USD 8,200</em>
+          </article>
+          <article>
+            <b>DEC 2026</b>
+            <span>Miami</span>
+            <strong>Villa + Transport</strong>
+            <em>USD 14,400</em>
+          </article>
+          <article>
+            <b>FEB 2027</b>
+            <span>Los Cabos</span>
+            <strong>Yacht Experience</strong>
+            <em>USD 7,900</em>
+          </article>
+        </div>
+      </section>
       <div className="rate-table">
         <div>
           <b>FECHA</b>
@@ -1773,6 +2156,25 @@ function ClientDetail() {
   );
 }
 function Finance() {
+  const { activeId, activeBranch } = useDestination();
+  const financeValue =
+    activeId === "global"
+      ? {
+          sales: 428000,
+          margin: 137000,
+          cost: 291000,
+          collect: 55600,
+          pay: 41400,
+        }
+      : {
+          sales: branchPerformance[activeId].sales,
+          margin: branchPerformance[activeId].margin,
+          cost:
+            branchPerformance[activeId].sales -
+            branchPerformance[activeId].margin,
+          collect: branchPerformance[activeId].collections,
+          pay: Math.round(branchPerformance[activeId].collections * 0.72),
+        };
   const cats = [
     ["Yates", 108000, 71200],
     ["Villas", 34200, 23800],
@@ -1785,23 +2187,48 @@ function Finance() {
     <Page>
       <Header
         eyebrow="SEPTIEMBRE 2026"
-        title="Finanzas"
+        title={
+          activeId === "global"
+            ? "Finanzas Globales"
+            : `Finanzas · ${activeBranch.name}`
+        }
         action={<button className="btn secondary">Exportar reporte</button>}
       />
       <section className="finance-hero broker-finance">
         <div>
           <span>MARGEN YRM</span>
-          <b>USD 63,200</b>
-          <em>USD · 34.3% sobre ventas</em>
+          <b>{usd(financeValue.margin)}</b>
+          <em>
+            USD ·{" "}
+            {((financeValue.margin / financeValue.sales) * 100).toFixed(1)}%
+            sobre ventas
+          </em>
         </div>
         <div>
-          <Metric label="Ventas" value="USD 184,500" />
-          <Metric label="Costo proveedores" value="USD 121,300" />
-          <Metric label="Pendiente de cobrar" value="USD 24,600" />
-          <Metric label="Pendiente de pagar" value="USD 18,400" />
+          <Metric label="Ventas" value={usd(financeValue.sales)} />
+          <Metric label="Costo proveedores" value={usd(financeValue.cost)} />
+          <Metric
+            label="Pendiente de cobrar"
+            value={usd(financeValue.collect)}
+          />
+          <Metric label="Pendiente de pagar" value={usd(financeValue.pay)} />
           <Metric label="Comisiones ejecutivos" value="USD 6,320" />
         </div>
       </section>
+      {activeId === "global" && (
+        <>
+          <Section title="Margin by destination" aside="CONSOLIDADO USD" />
+          <div className="finance-destinations">
+            {operationalDestinationIds.map((id) => (
+              <article key={id}>
+                <span>{destinationName(id)}</span>
+                <b>{usd(branchPerformance[id].margin)}</b>
+                <small>Ventas {usd(branchPerformance[id].sales)}</small>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
       <div className="two-col">
         <section className="panel">
           <Section title="Ventas vs costo proveedores" aside="ENE — SEP" />
@@ -1899,6 +2326,7 @@ function Finance() {
   );
 }
 function Team() {
+  const { activeId } = useDestination();
   const performance = [
     {
       name: "Alejandro Ruiz",
@@ -1936,47 +2364,93 @@ function Team() {
         }
       />
       <div className="team-performance">
-        {performance.map((p) => (
-          <article className="performance-card" key={p.name}>
-            <div className="avatar">
-              {p.name
-                .split(" ")
-                .map((x) => x[0])
-                .slice(0, 2)}
-            </div>
-            <StatusBadge>Activo</StatusBadge>
-            <h2>{p.name}</h2>
-            <p>{p.role}</p>
-            <div className="performance-grid">
-              <Metric label="Leads atendidos" value={String(p.leads)} />
-              <Metric label="Cotizaciones" value={String(p.quotes)} />
-              <Metric label="Reservas" value={String(p.bookings)} />
-              <Metric label="Tasa de cierre" value={`${p.conversion}%`} />
-              <Metric label="Ventas" value={usd(p.sales)} />
-              <Metric label="Margen generado" value={usd(p.margin)} accent />
-            </div>
-            <Metric label="Comisión" value={usd(p.commission)} />
-          </article>
-        ))}
+        {performance
+          .map((p, index) => ({
+            ...p,
+            destinations:
+              index < 2
+                ? operationalDestinationIds
+                : [destinationForIndex(index)],
+          }))
+          .filter(
+            (p) => activeId === "global" || p.destinations.includes(activeId),
+          )
+          .map((p) => (
+            <article className="performance-card" key={p.name}>
+              <div className="avatar">
+                {p.name
+                  .split(" ")
+                  .map((x) => x[0])
+                  .slice(0, 2)}
+              </div>
+              <StatusBadge>Activo</StatusBadge>
+              <h2>{p.name}</h2>
+              <p>{p.role}</p>
+              <div className="destination-tags">
+                {p.destinations.map((id) => (
+                  <span className="destination-badge" key={id}>
+                    {destinationName(id)}
+                    {p.destinations.length === 3 ? " · Global" : ""}
+                  </span>
+                ))}
+              </div>
+              <div className="performance-grid">
+                <Metric label="Leads atendidos" value={String(p.leads)} />
+                <Metric label="Cotizaciones" value={String(p.quotes)} />
+                <Metric label="Reservas" value={String(p.bookings)} />
+                <Metric label="Tasa de cierre" value={`${p.conversion}%`} />
+                <Metric label="Ventas" value={usd(p.sales)} />
+                <Metric label="Margen generado" value={usd(p.margin)} accent />
+              </div>
+              <Metric label="Comisión" value={usd(p.commission)} />
+            </article>
+          ))}
       </div>
       <Section title="Operaciones & Concierge" />
       <div className="team-grid">
-        {team.slice(2).map((t) => (
-          <article className="team-card" key={t.name}>
-            <div className="avatar">
-              {t.name
-                .split(" ")
-                .map((x) => x[0])
-                .slice(0, 2)}
-            </div>
-            <StatusBadge>{t.status}</StatusBadge>
-            <h2>{t.name}</h2>
-            <p>{t.role}</p>
-            <span className="muted">
-              Disponible para coordinación y seguimiento
-            </span>
-          </article>
-        ))}
+        {team
+          .slice(2)
+          .map((t, index) => ({
+            ...t,
+            destinations:
+              index === 0
+                ? (["riviera-maya"] as const)
+                : index === 1
+                  ? (["los-cabos"] as const)
+                  : index === 2
+                    ? (["miami"] as const)
+                    : operationalDestinationIds,
+          }))
+          .filter(
+            (t) =>
+              activeId === "global" ||
+              (t.destinations as readonly OperationalDestinationId[]).includes(
+                activeId,
+              ),
+          )
+          .map((t) => (
+            <article className="team-card" key={t.name}>
+              <div className="avatar">
+                {t.name
+                  .split(" ")
+                  .map((x) => x[0])
+                  .slice(0, 2)}
+              </div>
+              <StatusBadge>{t.status}</StatusBadge>
+              <h2>{t.name}</h2>
+              <p>{t.role}</p>
+              <div className="destination-tags">
+                {t.destinations.map((id) => (
+                  <span className="destination-badge" key={id}>
+                    {destinationName(id)}
+                  </span>
+                ))}
+              </div>
+              <span className="muted">
+                Disponible para coordinación y seguimiento
+              </span>
+            </article>
+          ))}
       </div>
     </Page>
   );
