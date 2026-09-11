@@ -93,3 +93,17 @@ persona. Esta simulación no implementa permisos, sucursales reales ni RBAC.
 ## Recursos
 
 Las imágenes críticas de la demo viven en `public/demo/` para evitar dependencias de red durante presentaciones. Las instrucciones para incorporar el logotipo oficial están en `public/brand/README.md`.
+
+## Arquitectura futura del inbox omnicanal
+
+El módulo `/messages` es una demostración local: no envía mensajes ni conecta
+cuentas reales. Sus entidades previstas son `Channel`, `Conversation`, `Message`,
+`ContactIdentity`, `Lead` y `Client`; una identidad puede contener `phone`,
+`email`, `instagramHandle`, `facebookId` y `whatsappPhone`. La vinculación con
+clientes se realiza manualmente y no se asume que perfiles de canales distintos
+pertenezcan a la misma persona.
+
+El flujo de producción será: webhook → conversación → mensaje → contacto →
+lead/cliente → cotización. Requerirá Meta Business, WhatsApp Business Platform,
+Instagram Messaging API, Messenger Platform, webhooks y los permisos y procesos
+de aprobación correspondientes. No basta con un usuario y contraseña.

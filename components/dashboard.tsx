@@ -30,6 +30,7 @@ import {
   LogOut,
   Globe2,
   ChevronDown,
+  MessagesSquare,
 } from "lucide-react";
 import { BusinessPage } from "./business-pages";
 import { Page, Header, StatusBadge, Filters, Modal, Bars, money } from "./ui";
@@ -68,6 +69,7 @@ const nav = [
     label: "PRINCIPAL",
     items: [
       ["Inicio", "/overview", LayoutDashboard],
+      ["Mensajes", "/messages", MessagesSquare],
       ["Operaciones", "/operations", CalendarDays],
       ["Leads", "/leads", UserRoundSearch],
       ["Cotizaciones", "/quotes", BookOpen],
@@ -139,6 +141,7 @@ export function Dashboard({ path }: { path: string }) {
                 >
                   <I size={17} />
                   {n}
+                  {p === "/messages" && <span className="nav-badge">12</span>}
                 </Link>
               ))}
             </nav>

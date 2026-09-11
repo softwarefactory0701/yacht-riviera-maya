@@ -77,6 +77,8 @@ export interface Lead {
   nextAction: string;
   stage: LeadStage;
   notes: string;
+  sourceChannel?: MessageChannel;
+  conversationId?: string;
 }
 export interface RatePlan {
   duration: string;
@@ -153,6 +155,45 @@ export interface MarginSummary {
   otherCosts: number;
   margin: number;
   marginPercent: number;
+}
+export type MessageChannel = "whatsapp" | "instagram" | "facebook";
+export type ConversationStatus =
+  "Nuevo" | "En conversación" | "Esperando cliente" | "Seguimiento" | "Cerrado";
+export interface ContactIdentity {
+  phone?: string;
+  email?: string;
+  instagramHandle?: string;
+  facebookId?: string;
+  whatsappPhone?: string;
+}
+export interface ConversationMessage {
+  id: string;
+  author: "contact" | "agent" | "note";
+  body: string;
+  time: string;
+  authorName?: string;
+}
+export interface Conversation {
+  id: string;
+  destinationId: "riviera-maya" | "miami" | "los-cabos";
+  name: string;
+  channel: MessageChannel;
+  status: ConversationStatus;
+  assignee?: string;
+  unread: number;
+  time: string;
+  lastMessage: string;
+  messages: ConversationMessage[];
+  clientId?: string;
+  lead?: {
+    id: string;
+    dates?: string;
+    guests?: number;
+    interests: string[];
+    sourceChannel?: MessageChannel;
+    conversationId?: string;
+  };
+  identity: ContactIdentity;
 }
 export const calculateMargin = (
   items: QuoteItem[],

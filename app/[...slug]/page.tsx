@@ -9,6 +9,7 @@ export default async function Page({
   const { slug } = await params;
   const allowed = new Set([
     "overview",
+    "messages",
     "operations",
     "leads",
     "quotes",

@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import { Bars, Filters, Header, Modal, Page, StatusBadge, Toast } from "./ui";
+import { MessagesPage } from "./messages-page";
 import {
   calculateMargin,
   Lead,
@@ -85,6 +86,7 @@ function useFeedback() {
   return { message, notify };
 }
 export function BusinessPage(path: string) {
+  if (path === "/messages") return <MessagesPage />;
   if (path === "/overview") return <Home />;
   if (path === "/operations") return <Operations />;
   if (path === "/leads") return <Leads />;
@@ -204,6 +206,7 @@ function Home() {
             </div>
           </section>
         </div>
+        <InboxWidget />
       </Page>
     );
   const value = branchPerformance[activeId];
@@ -279,7 +282,19 @@ function Home() {
           <Metric label="Recent Leads" value={String(value.leads)} />
         </section>
       </div>
+      <InboxWidget />
     </Page>
+  );
+}
+
+function InboxWidget() {
+  return (
+    <section className="inbox-widget">
+      <div><span className="eyebrow">INBOX</span><h2>Conversaciones que requieren atención</h2></div>
+      <dl><div><dt>Sin responder</dt><dd>12</dd></div><div><dt>Sin asignar</dt><dd>5</dd></div><div><dt>Nuevo hoy</dt><dd>18</dd></div></dl>
+      <div className="inbox-widget-channels"><span>WhatsApp</span><span>Instagram</span><span>Facebook</span></div>
+      <Link className="btn secondary" href="/messages">Ver mensajes <ChevronRight /></Link>
+    </section>
   );
 }
 
