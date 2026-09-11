@@ -19,6 +19,38 @@ export interface PublicCatalogItem {
   image: string;
 }
 
+export type PublicCategory =
+  | "yachts"
+  | "villas"
+  | "mobility"
+  | "dining"
+  | "experiences"
+  | "wellness"
+  | "nightlife";
+
+export interface PublicDestinationCatalogItem {
+  slug: string;
+  name: string;
+  destinationId: Destination["id"];
+  destination: string;
+  category: PublicCategory;
+  categoryLabel: string;
+  images: string[];
+  shortDescription: string;
+  capacity: string;
+  location: string;
+  durations: string[];
+  priceFrom: number;
+  currency: "USD";
+  highlights: string[];
+  publicAvailabilityLabel: "Disponibilidad bajo confirmación";
+}
+
+export interface PublicDestinationCatalog {
+  destinationId: Destination["id"];
+  items: PublicDestinationCatalogItem[];
+}
+
 export const toPublicCatalogItem = (
   item: CatalogItem,
   destination: string,

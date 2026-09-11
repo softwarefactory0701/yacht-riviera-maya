@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export function PublicLogo() {
   return (
@@ -17,6 +18,19 @@ export function PublicLogo() {
 export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [destinationsOpen, setDestinationsOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const activeDestination = pathname.startsWith("/miami")
+    ? "Miami"
+    : pathname.startsWith("/los-cabos")
+      ? "Los Cabos"
+      : "Riviera Maya";
+  const destinationOptions = [
+    ["Riviera Maya", "/riviera-maya"],
+    ["Miami", "/miami"],
+    ["Los Cabos", "/los-cabos"],
+  ];
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 28);
@@ -46,8 +60,38 @@ export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
       <header className={`public-header ${scrolled ? "is-scrolled" : ""}`}>
         <PublicLogo />
         <nav aria-label="Navegación principal">
+          <div className="public-destination-select">
+            <button
+              onClick={() => setDestinationsOpen((value) => !value)}
+              aria-expanded={destinationsOpen}
+            >
+              {activeDestination} <span>⌄</span>
+            </button>
+            <AnimatePresence>
+              {destinationsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                >
+                  {destinationOptions.map(([label, href]) => (
+                    <button
+                      className={label === activeDestination ? "active" : ""}
+                      key={href}
+                      onClick={() => {
+                        setDestinationsOpen(false);
+                        router.push(href);
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           {navigation.map(([label, href]) => (
-            <Link key={label} href={href}>
+            <Link key={label} href={pathname === "/" ? href : `/${href}`}>
               {label}
             </Link>
           ))}
@@ -87,8 +131,22 @@ export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
               </button>
               <PublicLogo />
               <nav>
+                <span className="public-mobile-destination">
+                  DESTINO · {activeDestination}
+                </span>
+                <div className="public-mobile-destinations">
+                  {destinationOptions.map(([label, href]) => (
+                    <Link key={href} href={href} onClick={() => setOpen(false)}>
+                      {label}
+                    </Link>
+                  ))}
+                </div>
                 {navigation.map(([label, href]) => (
-                  <Link key={label} href={href} onClick={() => setOpen(false)}>
+                  <Link
+                    key={label}
+                    href={pathname === "/" ? href : `/${href}`}
+                    onClick={() => setOpen(false)}
+                  >
                     {label}
                   </Link>
                 ))}
