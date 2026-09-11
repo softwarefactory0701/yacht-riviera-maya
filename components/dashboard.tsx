@@ -121,6 +121,12 @@ export function Dashboard({ path }: { path: string }) {
             <div>
               YACHT<strong>RIVIERA MAYA</strong>
             </div>
+            <span
+              className="demo-indicator"
+              title="Datos simulados para presentación"
+            >
+              DEMO
+            </span>
           </div>
           <button className="close" onClick={() => setOpen(false)}>
             <X />
@@ -192,6 +198,26 @@ export function Dashboard({ path }: { path: string }) {
               {query.trim() && (
                 <div className="search-results">
                   {[
+                    {
+                      label: "James Miller",
+                      kind: "Lead · Miami · Instagram",
+                      href: "/leads/james-miller",
+                    },
+                    {
+                      label: "QT-2041",
+                      kind: "Cotización · James Miller",
+                      href: "/quotes/QT-2041",
+                    },
+                    {
+                      label: "YRM-4120",
+                      kind: "Reserva · James Miller",
+                      href: "/bookings/YRM-4120",
+                    },
+                    {
+                      label: "OP-4120",
+                      kind: "Operación · James Miller",
+                      href: "/operations/OP-4120",
+                    },
                     {
                       label: "Roberto Hernández",
                       kind: "Cliente",
@@ -1466,6 +1492,8 @@ function Team() {
 function SettingsPage() {
   const [notif, setNotif] = useState({ email: true, whatsapp: false });
   const [branchDetail, setBranchDetail] = useState<BranchId | null>(null);
+  const [resetOpen, setResetOpen] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
   const { setActiveId } = useDestination();
   return (
     <Page>
@@ -1516,6 +1544,17 @@ function SettingsPage() {
               </select>
             </label>
           </div>
+        </section>
+        <section className="panel demo-settings">
+          <SectionTitle title="Demo data" />
+          <p>
+            Restaura el caso comercial y elimina únicamente los cambios locales
+            de esta presentación.
+          </p>
+          <button className="btn secondary" onClick={() => setResetOpen(true)}>
+            Reset demo data
+          </button>
+          {resetDone && <small>Demo restaurada · contexto Global</small>}
         </section>
         <section className="panel">
           <SectionTitle title="Configuración de reservas" />
@@ -1618,6 +1657,35 @@ function SettingsPage() {
             </div>
           )
         )}
+      </Modal>
+      <Modal open={resetOpen} onClose={() => setResetOpen(false)}>
+        <div className="reset-demo-dialog">
+          <span className="eyebrow">DEMO MODE</span>
+          <h2>¿Restaurar datos de presentación?</h2>
+          <p>
+            Se eliminarán mensajes, borradores y estados modificados en esta
+            sesión. No afecta datos reales.
+          </p>
+          <div className="modal-actions">
+            <button onClick={() => setResetOpen(false)}>Cancelar</button>
+            <button
+              className="btn"
+              onClick={() => {
+                [
+                  "yrm-inbox-state",
+                  "yrm-inbox-quote-draft",
+                  "yrm-james-booking",
+                  "yrm-active-destination",
+                ].forEach((key) => sessionStorage.removeItem(key));
+                setActiveId("global");
+                setResetOpen(false);
+                setResetDone(true);
+              }}
+            >
+              Restaurar demo
+            </button>
+          </div>
+        </div>
       </Modal>
     </Page>
   );

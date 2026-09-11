@@ -107,3 +107,18 @@ El flujo de producción será: webhook → conversación → mensaje → contact
 lead/cliente → cotización. Requerirá Meta Business, WhatsApp Business Platform,
 Instagram Messaging API, Messenger Platform, webhooks y los permisos y procesos
 de aprobación correspondientes. No basta con un usuario y contraseña.
+
+## Demo flow
+
+1. Iniciar sesión en `/login`.
+2. Abrir **Messages** y seleccionar **James Miller**.
+3. Crear el lead `LD-2041`.
+4. Preparar la cotización `QT-2041`.
+5. Generar la propuesta **Miami Private Weekend**.
+6. Confirmar la propuesta y abrir la reserva `YRM-4120`.
+7. Abrir la operación `OP-4120`.
+8. Revisar el impacto en **Finance**.
+9. Abrir el perfil global de **James Miller** en **Clients**.
+
+Todo el recorrido usa datos locales de demostración y puede restaurarse desde
+**Settings → Reset demo data**.

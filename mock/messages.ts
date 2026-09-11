@@ -154,7 +154,7 @@ export const conversations: Conversation[] = seeds.map((seed, index) => {
   const first = name.split(" ")[0];
   const isJames = index === 0;
   return {
-    id: `CONV-${String(index + 1).padStart(3, "0")}`,
+    id: index === 0 ? "CV-1001" : `CV-${String(index + 1001).padStart(4, "0")}`,
     name,
     channel,
     destinationId,

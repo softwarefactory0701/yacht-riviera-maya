@@ -23,6 +23,14 @@ import {
 import { Bars, Filters, Header, Modal, Page, StatusBadge, Toast } from "./ui";
 import { MessagesPage } from "./messages-page";
 import {
+  JamesBooking,
+  JamesClient,
+  JamesLeadDetail,
+  JamesOperation,
+  JamesQuote,
+} from "./commercial-flow";
+import { jamesCase } from "@/lib/demo-case";
+import {
   calculateMargin,
   Lead,
   LeadStage,
@@ -87,6 +95,12 @@ function useFeedback() {
 }
 export function BusinessPage(path: string) {
   if (path === "/messages") return <MessagesPage />;
+  if (path === `/leads/${jamesCase.clientId}`) return <JamesLeadDetail />;
+  if (path === `/quotes/${jamesCase.quoteId}`) return <JamesQuote />;
+  if (path === `/bookings/${jamesCase.bookingId}`) return <JamesBooking />;
+  if (path === `/operations/${jamesCase.operationId}`)
+    return <JamesOperation />;
+  if (path === `/clients/${jamesCase.clientId}`) return <JamesClient />;
   if (path === "/overview") return <Home />;
   if (path === "/operations") return <Operations />;
   if (path === "/leads") return <Leads />;
@@ -290,10 +304,39 @@ function Home() {
 function InboxWidget() {
   return (
     <section className="inbox-widget">
-      <div><span className="eyebrow">INBOX</span><h2>Conversaciones que requieren atención</h2></div>
-      <dl><div><dt>Sin responder</dt><dd>12</dd></div><div><dt>Sin asignar</dt><dd>5</dd></div><div><dt>Nuevo hoy</dt><dd>18</dd></div></dl>
-      <div className="inbox-widget-channels"><span>WhatsApp</span><span>Instagram</span><span>Facebook</span></div>
-      <Link className="btn secondary" href="/messages">Ver mensajes <ChevronRight /></Link>
+      <div>
+        <span className="eyebrow">INBOX</span>
+        <h2>Conversaciones que requieren atención</h2>
+        <Link
+          className="overview-activity"
+          href={`/bookings/${jamesCase.bookingId}`}
+        >
+          <b>James Miller · Miami</b>
+          <span>New booking confirmed · USD 11,950</span>
+        </Link>
+      </div>
+      <dl>
+        <div>
+          <dt>Sin responder</dt>
+          <dd>12</dd>
+        </div>
+        <div>
+          <dt>Sin asignar</dt>
+          <dd>5</dd>
+        </div>
+        <div>
+          <dt>Nuevo hoy</dt>
+          <dd>18</dd>
+        </div>
+      </dl>
+      <div className="inbox-widget-channels">
+        <span>WhatsApp</span>
+        <span>Instagram</span>
+        <span>Facebook</span>
+      </div>
+      <Link className="btn secondary" href="/messages">
+        Ver mensajes <ChevronRight />
+      </Link>
     </section>
   );
 }
@@ -523,6 +566,25 @@ function Leads() {
   const { activeId } = useDestination();
   const [stage, setStage] = useState("Todos"),
     [data, setData] = useState<Lead[]>([
+      {
+        id: jamesCase.leadId,
+        name: jamesCase.name,
+        country: "United States",
+        phone: "+1 305 555 0188",
+        date: jamesCase.dates,
+        guests: jamesCase.guests,
+        stay: "Miami",
+        budget: 10000,
+        interest: "Plan Your Stay",
+        source: jamesCase.source,
+        owner: "Sofía",
+        lastContact: "Hace 2 min",
+        nextAction: "Prepare quote",
+        stage: "Contactado",
+        notes: jamesCase.interests.join(" · "),
+        sourceChannel: "instagram",
+        conversationId: jamesCase.conversationId,
+      },
       ...seedLeads,
       {
         id: "L-WEB-3018",
@@ -557,7 +619,7 @@ function Leads() {
   const enrichedLeads = data.map((lead, index) => ({
     ...lead,
     destinationId:
-      lead.id === "L-WEB-3018"
+      lead.id === jamesCase.leadId || lead.id === "L-WEB-3018"
         ? ("miami" as const)
         : destinationForIndex(index),
   }));
@@ -604,7 +666,13 @@ function Leads() {
                 {destinationName(l.destinationId)}
               </span>
             </div>
-            <h2>{l.name}</h2>
+            <h2>
+              {l.id === jamesCase.leadId ? (
+                <Link href={`/leads/${jamesCase.clientId}`}>{l.name}</Link>
+              ) : (
+                l.name
+              )}
+            </h2>
             <p>
               {l.country} · {l.stay}
             </p>
@@ -620,7 +688,11 @@ function Leads() {
               <span>Último contacto {l.lastContact.toLowerCase()}</span>
             </p>
             <div className="card-actions">
-              <button onClick={() => setSelected(l.id)}>Ver detalle</button>
+              {l.id === jamesCase.leadId ? (
+                <Link href={`/leads/${jamesCase.clientId}`}>Ver detalle</Link>
+              ) : (
+                <button onClick={() => setSelected(l.id)}>Ver detalle</button>
+              )}
               <Link href="/quotes">Crear cotización</Link>
               <button onClick={() => setSelected(l.id)}>Agregar nota</button>
               <button onClick={() => change(l.id)}>Cambiar estado</button>
@@ -1756,6 +1828,16 @@ function Bookings() {
   const feedback = useFeedback();
   const rows = [
     {
+      id: jamesCase.bookingId,
+      client: jamesCase.name,
+      services: "Miami Private Weekend · 4 services",
+      date: jamesCase.dates,
+      sale: jamesCase.total,
+      collected: jamesCase.deposit,
+      cost: jamesCase.supplierCost,
+      status: "Confirmada",
+    },
+    {
       id: "YRM-3094",
       client: "Roberto Hernández",
       services: "Azimut 55 + 4 servicios",
@@ -1805,7 +1887,10 @@ function Bookings() {
   const destinationRows = rows
     .map((row, index) => ({
       ...row,
-      destinationId: destinationForIndex(index),
+      destinationId:
+        row.id === jamesCase.bookingId
+          ? jamesCase.destinationId
+          : destinationForIndex(index),
     }))
     .filter((row) => activeId === "global" || row.destinationId === activeId);
   return (
@@ -2024,6 +2109,26 @@ function Clients() {
         }
       />
       <div className="client-grid broker-clients">
+        <Link
+          href={`/clients/${jamesCase.clientId}`}
+          className="client-card golden-client-card"
+        >
+          <div className="avatar">JM</div>
+          <StatusBadge>New</StatusBadge>
+          <h2>James Miller</h2>
+          <p>Miami · Origen: Instagram</p>
+          <div className="destination-tags">
+            <span className="destination-badge">Miami</span>
+            <span className="destination-badge">CRM Global</span>
+          </div>
+          <Metric label="Total comprado" value={usd(jamesCase.total)} />
+          <Metric label="Margen generado" value={usd(jamesCase.margin)} />
+          <div>
+            <span>1 reserva</span>
+            <span>Luxury Weekend</span>
+          </div>
+          <ChevronRight />
+        </Link>
         {clients.map((c, index) => (
           <Link href={`/clients/${c.id}`} className="client-card" key={c.id}>
             <div className="avatar">
@@ -2265,6 +2370,17 @@ function Finance() {
           <Metric label="Promedio mensual" value="USD 48,900" />
         </section>
       </div>
+      {(activeId === "global" || activeId === "miami") && (
+        <section className="panel james-finance-row">
+          <div>
+            <span className="eyebrow">RECENT SALE · MIAMI</span>
+            <h2>James Miller · {jamesCase.bookingId}</h2>
+          </div>
+          <Metric label="Sale" value={usd(jamesCase.total)} />
+          <Metric label="Supplier Cost" value={usd(jamesCase.supplierCost)} />
+          <Metric label="YRM Margin" value={usd(jamesCase.margin)} accent />
+        </section>
+      )}
       <Section title="Resultados por categoría" aside="USD" />
       <div className="category-finance">
         <div>

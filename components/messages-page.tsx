@@ -34,6 +34,7 @@ import {
   replyTemplates,
 } from "@/mock/messages";
 import { destinationName, useDestination } from "@/lib/destination-context";
+import { jamesCase } from "@/lib/demo-case";
 import { Modal, StatusBadge, Toast } from "./ui";
 
 const channelLabels: Record<MessageChannel, string> = {
@@ -72,12 +73,20 @@ export function MessagesPage() {
     if (typeof window === "undefined") return seedConversations;
     try {
       const saved = sessionStorage.getItem("yrm-inbox-state");
-      return saved ? JSON.parse(saved) : seedConversations;
+      if (!saved) return seedConversations;
+      const parsed = JSON.parse(saved) as Conversation[];
+      return parsed.map((conversation, index) => ({
+        ...conversation,
+        id:
+          index === 0
+            ? jamesCase.conversationId
+            : conversation.id.replace("CONV-", "CV-1"),
+      }));
     } catch {
       return seedConversations;
     }
   });
-  const [selectedId, setSelectedId] = useState("CONV-001");
+  const [selectedId, setSelectedId] = useState(jamesCase.conversationId);
   const [filter, setFilter] = useState("Todos");
   const [channel, setChannel] = useState<MessageChannel | "all">("all");
   const [query, setQuery] = useState("");
@@ -166,7 +175,10 @@ export function MessagesPage() {
     mutate((item) => ({
       ...item,
       lead: {
-        id: `L-INBOX-${Date.now().toString().slice(-4)}`,
+        id:
+          item.id === jamesCase.conversationId
+            ? jamesCase.leadId
+            : `LD-${Date.now().toString().slice(-4)}`,
         dates: "12–16 nov",
         guests: 8,
         interests: ["Yacht", "Dining", "Transport"],
@@ -176,6 +188,8 @@ export function MessagesPage() {
     }));
     setCreateLeadOpen(false);
     notify("Lead creado desde la conversación");
+    if (selected?.id === jamesCase.conversationId)
+      router.push(`/leads/${jamesCase.clientId}`);
   };
   const createQuote = () => {
     if (!selected) return;
@@ -786,7 +800,7 @@ function AssistantSuggestion({
   selected: Conversation;
   onCreate: () => void;
 }) {
-  if (selected.id !== "CONV-001") return null;
+  if (selected.id !== jamesCase.conversationId) return null;
   return (
     <section className="assistant-suggestion">
       <span>
