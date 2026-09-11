@@ -23,6 +23,981 @@
   --red: var(--yrm-danger);
   --amber: var(--yrm-warning);
 }
+
+/* Public website */
+.public-site {
+  overflow: clip;
+  background: #050b15;
+  color: var(--yrm-white);
+}
+.public-site a {
+  text-decoration: none;
+}
+.public-site button {
+  cursor: pointer;
+}
+.public-header {
+  position: fixed;
+  z-index: 70;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  height: 88px;
+  padding: 0 clamp(28px, 5vw, 88px);
+  transition:
+    background 0.3s,
+    height 0.3s,
+    border-color 0.3s;
+  border-bottom: 1px solid transparent;
+}
+.public-header.is-scrolled {
+  height: 72px;
+  background: rgba(5, 11, 21, 0.88);
+  border-color: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px);
+}
+.public-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  width: max-content;
+  letter-spacing: 0.18em;
+}
+.public-logo span {
+  font-size: 10px;
+}
+.public-logo strong {
+  font:
+    600 25px/1 "Cormorant Garamond",
+    serif;
+  color: var(--yrm-caribbean);
+}
+.public-header nav {
+  display: flex;
+  gap: clamp(22px, 2.5vw, 42px);
+}
+.public-header nav a,
+.public-header-actions {
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.public-header nav a {
+  color: #dae4eb;
+  transition: color 0.2s;
+}
+.public-header nav a:hover {
+  color: var(--yrm-caribbean);
+}
+.public-header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 22px;
+}
+.public-header-actions button {
+  padding: 11px 15px;
+  color: var(--yrm-white);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 9px;
+}
+.public-header-actions a {
+  color: var(--yrm-mist);
+}
+.public-menu-button {
+  display: none;
+  justify-self: end;
+  color: white;
+  border: 0;
+  background: none;
+}
+.public-primary,
+.public-secondary,
+.public-text-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid var(--yrm-riviera);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+  font-weight: 500;
+}
+.public-primary {
+  background: var(--yrm-riviera);
+  color: #03101b;
+}
+.public-secondary {
+  background: rgba(4, 14, 27, 0.22);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+}
+.public-primary svg,
+.public-text-link svg {
+  width: 15px;
+}
+.public-hero {
+  position: relative;
+  display: flex;
+  align-items: end;
+  min-height: 100svh;
+  padding: 160px clamp(28px, 8vw, 150px) clamp(70px, 10vh, 110px);
+}
+.public-hero > img,
+.public-final-cta > img {
+  object-fit: cover;
+}
+.public-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 9, 18, 0.88),
+      rgba(3, 14, 28, 0.35) 58%,
+      rgba(3, 14, 28, 0.18)
+    ),
+    linear-gradient(0deg, rgba(3, 10, 19, 0.67), transparent 58%);
+}
+.public-hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 820px;
+}
+.public-hero-copy > span,
+.public-section-heading > span,
+.public-concierge > div > span,
+.destination-hero > div > span {
+  color: var(--yrm-caribbean);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.public-hero-copy h1 {
+  margin: 18px 0 22px;
+  font:
+    500 clamp(54px, 6.2vw, 102px)/0.88 "Cormorant Garamond",
+    serif;
+  letter-spacing: -0.025em;
+}
+.public-hero-copy p {
+  max-width: 650px;
+  color: #d3dfe7;
+  font-size: clamp(15px, 1.3vw, 19px);
+  line-height: 1.6;
+}
+.public-hero-copy > div {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+.public-scroll-mark {
+  position: absolute;
+  z-index: 2;
+  right: clamp(28px, 5vw, 86px);
+  bottom: 45px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--yrm-mist);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+}
+.public-scroll-mark i {
+  display: block;
+  width: 50px;
+  height: 1px;
+  background: var(--yrm-riviera);
+}
+.public-section {
+  padding: clamp(82px, 10vw, 150px) clamp(24px, 6vw, 110px);
+}
+.public-section-heading {
+  max-width: 840px;
+  margin-bottom: clamp(38px, 5vw, 70px);
+}
+.public-section-heading h2,
+.public-concierge h2,
+.public-final-cta h2,
+.destination-preview h2 {
+  margin: 14px 0 0;
+  font:
+    500 clamp(42px, 5vw, 72px)/0.98 "Cormorant Garamond",
+    serif;
+  letter-spacing: -0.02em;
+}
+.public-section-heading p {
+  max-width: 620px;
+  color: var(--yrm-mist);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.public-destinations {
+  background: #081321;
+}
+.public-destination-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.public-destination-grid article {
+  position: relative;
+  min-height: clamp(470px, 54vw, 670px);
+  overflow: hidden;
+}
+.public-destination-grid article > img,
+.public-experience-grid article > img,
+.public-category-grid article > img {
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.public-destination-grid article:hover > img,
+.public-experience-grid article:hover > img,
+.public-category-grid article:hover > img {
+  transform: scale(1.025);
+}
+.public-card-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(2, 10, 20, 0.94),
+    rgba(4, 13, 25, 0.05) 70%
+  );
+}
+.public-destination-grid article > div:last-child,
+.public-experience-grid article > div:last-child {
+  position: absolute;
+  right: 30px;
+  bottom: 32px;
+  left: 30px;
+}
+.public-destination-grid span,
+.public-yacht-copy > span,
+.public-dining article > span {
+  color: var(--yrm-caribbean);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.public-destination-grid h3,
+.public-experience-grid h3,
+.public-yacht-copy h3,
+.public-dining h3 {
+  margin: 8px 0;
+  font:
+    500 32px/1 "Cormorant Garamond",
+    serif;
+  text-transform: uppercase;
+}
+.public-destination-grid p {
+  max-width: 330px;
+  color: #c0ccd5;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.public-destination-grid a,
+.public-yacht-copy button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  color: white;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--yrm-riviera);
+  padding: 0 0 7px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.public-destination-grid svg,
+.public-yacht-copy svg {
+  width: 14px;
+}
+.public-experiences {
+  background: #050b15;
+}
+.public-experience-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+}
+.public-experience-grid article {
+  position: relative;
+  min-height: 410px;
+  overflow: hidden;
+}
+.public-experience-grid article:nth-child(2),
+.public-experience-grid article:nth-child(3) {
+  min-height: 330px;
+}
+.public-experience-grid h3 {
+  font-size: clamp(28px, 3vw, 45px);
+}
+.public-experience-grid p {
+  margin: 8px 0;
+  color: #d3dce3;
+}
+.public-experience-grid span {
+  color: var(--yrm-caribbean);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.public-text-link {
+  margin-top: 34px;
+  padding: 0 0 7px;
+  min-height: auto;
+  color: var(--yrm-white);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--yrm-riviera);
+}
+.public-categories {
+  background: #0a1726;
+}
+.public-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 220px;
+  gap: 12px;
+}
+.public-category-grid article {
+  position: relative;
+  overflow: hidden;
+}
+.public-category-grid article.large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.public-category-grid h3 {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  margin: 0;
+  font:
+    500 clamp(20px, 2vw, 30px) "Cormorant Garamond",
+    serif;
+}
+.public-yachts {
+  background: #06101c;
+}
+.public-yacht-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.public-yacht-grid article {
+  border: 1px solid var(--yrm-border);
+  background: #091625;
+}
+.public-yacht-image {
+  position: relative;
+  height: 270px;
+  overflow: hidden;
+}
+.public-yacht-image img {
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+.public-yacht-grid article:hover img {
+  transform: scale(1.025);
+}
+.public-yacht-copy {
+  padding: 23px;
+}
+.public-yacht-copy h3 {
+  font-size: 28px;
+}
+.public-yacht-copy p {
+  color: var(--yrm-mist);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.public-yacht-copy strong {
+  display: block;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.public-concierge,
+.public-stay {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 760px;
+}
+.public-concierge-image,
+.public-stay-image {
+  position: relative;
+  min-height: 620px;
+}
+.public-concierge-image img,
+.public-stay-image img {
+  object-fit: cover;
+}
+.public-concierge > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 7vw, 110px);
+  background: #0b1a2b;
+}
+.public-concierge p {
+  color: var(--yrm-mist);
+  line-height: 1.7;
+  max-width: 570px;
+}
+.public-service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 22px 0 32px;
+}
+.public-service-list span {
+  padding: 8px 12px;
+  border: 1px solid var(--yrm-border);
+  color: #d3dde5;
+  font-size: 10px;
+}
+.public-concierge .public-primary {
+  width: max-content;
+}
+.public-stay {
+  min-height: 680px;
+  padding-right: 0;
+  background: #050b15;
+}
+.public-stay > div:first-child {
+  padding-right: clamp(40px, 7vw, 110px);
+}
+.public-itinerary-label {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--yrm-caribbean);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+.public-day {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  min-height: 70px;
+  border-top: 1px solid var(--yrm-border);
+}
+.public-day:last-of-type {
+  border-bottom: 1px solid var(--yrm-border);
+}
+.public-day b {
+  color: var(--yrm-riviera);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.public-day p {
+  color: #d6e0e7;
+  font-size: 13px;
+}
+.public-dining {
+  background: #0a1726;
+}
+.public-dining > div:last-child {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.public-dining article > div {
+  position: relative;
+  height: 350px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.public-dining article img {
+  object-fit: cover;
+}
+.public-dining article button {
+  color: var(--yrm-white);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--yrm-riviera);
+  padding: 8px 0;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.public-how {
+  background: #06101c;
+}
+.public-how > div:last-child {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--yrm-border);
+}
+.public-how article {
+  padding: 28px 28px 12px 0;
+  border-right: 1px solid var(--yrm-border);
+}
+.public-how article + article {
+  padding-left: 28px;
+}
+.public-how article span {
+  color: var(--yrm-riviera);
+  font: 500 30px "Cormorant Garamond";
+}
+.public-how article p {
+  font-size: 14px;
+}
+.public-testimonials {
+  display: grid;
+  grid-template-columns: 0.6fr 1fr 1fr;
+  gap: 55px;
+  align-items: start;
+  background: #0a1726;
+}
+.public-testimonials > span {
+  color: var(--yrm-steel);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+.public-testimonials blockquote {
+  margin: 0;
+  font: 500 clamp(23px, 2.3vw, 34px)/1.25 "Cormorant Garamond";
+}
+.public-testimonials cite {
+  display: block;
+  margin-top: 24px;
+  color: var(--yrm-riviera);
+  font: normal 10px "DM Sans";
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.public-final-cta {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 660px;
+  padding: 70px 24px;
+  text-align: center;
+}
+.public-final-cta > div:last-child {
+  position: relative;
+  z-index: 2;
+}
+.public-final-cta h2 {
+  font-size: clamp(50px, 6vw, 88px);
+}
+.public-final-cta > div > div {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 34px;
+}
+.public-footer {
+  display: grid;
+  grid-template-columns: 1.8fr repeat(4, 1fr);
+  gap: 38px;
+  padding: 70px clamp(24px, 6vw, 110px) 38px;
+  background: #030811;
+  border-top: 1px solid var(--yrm-border);
+}
+.public-footer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+}
+.public-footer p {
+  color: var(--yrm-mist);
+  font-size: 12px;
+}
+.public-footer b {
+  margin-bottom: 8px;
+  color: var(--yrm-steel);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.public-footer a,
+.public-footer button {
+  padding: 0;
+  color: #d3dce4;
+  background: none;
+  border: 0;
+  font-size: 11px;
+}
+.public-footer > small {
+  grid-column: 1/-1;
+  margin-top: 34px;
+  padding-top: 22px;
+  color: var(--yrm-steel);
+  border-top: 1px solid var(--yrm-border);
+  font-size: 9px;
+}
+.public-floating-concierge {
+  position: fixed;
+  z-index: 65;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 17px;
+  color: white;
+  background: rgba(8, 27, 44, 0.92);
+  border: 1px solid var(--yrm-riviera);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 9px;
+}
+.public-floating-concierge svg {
+  width: 17px;
+  color: var(--yrm-caribbean);
+}
+.public-concierge-modal {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.public-concierge-modal > button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: rgba(1, 7, 14, 0.82);
+  backdrop-filter: blur(8px);
+}
+.public-concierge-modal > div {
+  position: relative;
+  width: min(500px, 100%);
+  padding: 48px;
+  background: #0b1a2b;
+  border: 1px solid var(--yrm-border);
+  box-shadow: 0 30px 80px #000;
+}
+.public-concierge-modal > div > button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: white;
+  border: 0;
+  background: none;
+}
+.public-concierge-modal span {
+  color: var(--yrm-riviera);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+.public-concierge-modal h2 {
+  margin: 15px 0;
+  font: 500 42px "Cormorant Garamond";
+}
+.public-concierge-modal p {
+  color: var(--yrm-mist);
+  line-height: 1.65;
+}
+.public-concierge-modal small {
+  color: var(--yrm-steel);
+  font-size: 9px;
+}
+.destination-hero {
+  position: relative;
+  display: flex;
+  align-items: end;
+  min-height: 78svh;
+  padding: 140px clamp(25px, 8vw, 150px) 85px;
+}
+.destination-hero > img {
+  object-fit: cover;
+}
+.destination-hero > div:last-child {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+.destination-hero h1 {
+  margin: 10px 0;
+  font: 500 clamp(64px, 9vw, 130px)/0.9 "Cormorant Garamond";
+}
+.destination-hero p {
+  max-width: 570px;
+  margin-bottom: 28px;
+  color: #dae3e9;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.destination-back {
+  position: absolute;
+  z-index: 3;
+  top: 35px;
+  left: clamp(25px, 5vw, 80px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.destination-back svg {
+  width: 16px;
+}
+.destination-preview {
+  padding: clamp(80px, 10vw, 145px) clamp(25px, 8vw, 150px);
+}
+.destination-preview > span {
+  color: var(--yrm-riviera);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+.destination-preview > p {
+  max-width: 600px;
+  color: var(--yrm-mist);
+  line-height: 1.7;
+}
+.destination-preview > div {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 55px;
+  border-top: 1px solid var(--yrm-border);
+}
+.destination-preview article {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 25px;
+  border-right: 1px solid var(--yrm-border);
+}
+.destination-preview article span {
+  color: var(--yrm-steel);
+  font-size: 10px;
+}
+.public-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .public-header {
+    grid-template-columns: 1fr auto;
+  }
+  .public-header > nav,
+  .public-header-actions {
+    display: none;
+  }
+  .public-menu-button {
+    display: grid;
+  }
+  .public-mobile-menu {
+    position: fixed;
+    z-index: 90;
+    inset: 0;
+    display: block;
+    background: rgba(0, 5, 12, 0.75);
+    backdrop-filter: blur(8px);
+  }
+  .public-mobile-menu > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    width: min(440px, 90vw);
+    height: 100%;
+    padding: 45px 35px;
+    background: #081522;
+  }
+  .public-mobile-menu nav {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin: 70px 0 40px;
+  }
+  .public-mobile-menu nav a {
+    font: 500 34px "Cormorant Garamond";
+  }
+  .public-menu-close {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    color: white;
+    border: 0;
+    background: none;
+  }
+  .public-private-link {
+    margin-top: 24px;
+    color: var(--yrm-mist);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .public-yacht-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .public-category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .public-testimonials {
+    grid-template-columns: 1fr 1fr;
+  }
+  .public-testimonials > span {
+    grid-column: 1/-1;
+  }
+}
+
+@media (max-width: 700px) {
+  .public-header {
+    height: 70px;
+    padding: 0 20px;
+  }
+  .public-hero {
+    min-height: 100svh;
+    padding: 120px 20px 65px;
+  }
+  .public-hero-shade {
+    background: linear-gradient(
+      0deg,
+      rgba(2, 9, 18, 0.94),
+      rgba(3, 13, 25, 0.22) 72%
+    );
+  }
+  .public-hero-copy h1 {
+    font-size: clamp(50px, 15vw, 69px);
+  }
+  .public-hero-copy p {
+    font-size: 14px;
+  }
+  .public-hero-copy > div,
+  .public-final-cta > div > div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .public-scroll-mark {
+    display: none;
+  }
+  .public-section {
+    padding: 78px 20px;
+  }
+  .public-section-heading h2,
+  .public-concierge h2 {
+    font-size: 44px;
+  }
+  .public-destination-grid,
+  .public-experience-grid,
+  .public-dining > div:last-child {
+    grid-template-columns: 1fr;
+  }
+  .public-destination-grid article {
+    min-height: 500px;
+  }
+  .public-experience-grid article,
+  .public-experience-grid article:nth-child(2),
+  .public-experience-grid article:nth-child(3) {
+    min-height: 380px;
+  }
+  .public-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 165px;
+  }
+  .public-category-grid article.large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .public-yacht-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+  }
+  .public-yacht-grid article {
+    min-width: 86vw;
+    scroll-snap-align: start;
+  }
+  .public-concierge,
+  .public-stay {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .public-concierge-image,
+  .public-stay-image {
+    min-height: 480px;
+  }
+  .public-concierge > div:last-child {
+    padding: 70px 20px;
+  }
+  .public-stay {
+    padding-right: 20px;
+  }
+  .public-stay > div:first-child {
+    padding-right: 0;
+  }
+  .public-stay-image {
+    grid-row: 1;
+    min-height: 400px;
+    margin: -78px -20px 65px;
+  }
+  .public-dining article > div {
+    height: 330px;
+  }
+  .public-how > div:last-child {
+    grid-template-columns: 1fr 1fr;
+  }
+  .public-how article:nth-child(2) {
+    border-right: 0;
+  }
+  .public-how article + article {
+    padding-left: 18px;
+  }
+  .public-testimonials {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .public-final-cta {
+    min-height: 600px;
+  }
+  .public-footer {
+    grid-template-columns: 1fr 1fr;
+  }
+  .public-footer > div:first-child {
+    grid-column: 1/-1;
+  }
+  .public-floating-concierge span {
+    display: none;
+  }
+  .public-floating-concierge {
+    width: 50px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .public-concierge-modal > div {
+    padding: 42px 25px 32px;
+  }
+  .destination-hero {
+    min-height: 82svh;
+    padding: 120px 20px 60px;
+  }
+  .destination-hero h1 {
+    font-size: 65px;
+  }
+  .destination-preview {
+    padding: 78px 20px;
+  }
+  .destination-preview > div {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 * {
   box-sizing: border-box;
 }
