@@ -51,6 +51,39 @@ export interface PublicDestinationCatalog {
   items: PublicDestinationCatalogItem[];
 }
 
+export interface PublicDiningExperience {
+  slug: string;
+  name: string;
+  destinationId: Destination["id"];
+  destination: string;
+  type:
+    | "Restaurant"
+    | "Private Dining"
+    | "Chef"
+    | "Beach Club"
+    | "Rooftop"
+    | "Nightlife Dinner";
+  moments: ("Lunch" | "Dinner" | "Sunset" | "Late Night")[];
+  zone: string;
+  group: "Couple" | "Small group" | "Large group";
+  image: string;
+  description: string;
+  dressCode?: string;
+  priceIndication?: string;
+  includes: string[];
+}
+
+export interface CuratedExperience {
+  id: string;
+  name: string;
+  destinationId: Destination["id"];
+  destination: string;
+  image: string;
+  style: string;
+  interests: string[];
+  days: { day: string; activities: string[] }[];
+}
+
 export const toPublicCatalogItem = (
   item: CatalogItem,
   destination: string,

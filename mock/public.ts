@@ -6,6 +6,8 @@ import {
   PublicCategory,
   PublicDestinationCatalog,
   PublicDestinationCatalogItem,
+  PublicDiningExperience,
+  CuratedExperience,
   toPublicCatalogItem,
 } from "@/lib/public-types";
 
@@ -288,3 +290,134 @@ export const getPublicDestination = (id: string) =>
   destinations.find((item) => item.id === id);
 export const getDestinationCatalog = (id: string) =>
   destinationCatalogs.find((item) => item.destinationId === id);
+
+const diningNames: Record<Destination["id"], string[]> = {
+  "riviera-maya": [
+    "Private Chef at Villa",
+    "Sunset Dinner",
+    "Dinner on Board",
+    "Jungle Table",
+    "Chef + Bartender Experience",
+    "Villa Celebration Dinner",
+  ],
+  miami: [
+    "Private Dinner at Your Villa",
+    "South Beach Table",
+    "Dinner on Board",
+    "Design District Evening",
+    "Rooftop Dinner",
+    "Private Mixology Experience",
+  ],
+  "los-cabos": [
+    "Pacific Sunset Dinner",
+    "Private Chef at Villa",
+    "Dinner on Board",
+    "Palmilla Table",
+    "Desert Chef Experience",
+    "Villa Celebration Dinner",
+  ],
+};
+const diningTypes: PublicDiningExperience["type"][] = [
+  "Private Dining",
+  "Restaurant",
+  "Chef",
+  "Beach Club",
+  "Rooftop",
+  "Nightlife Dinner",
+];
+const diningMoments: PublicDiningExperience["moments"][] = [
+  ["Dinner"],
+  ["Lunch", "Dinner"],
+  ["Sunset", "Dinner"],
+  ["Lunch", "Sunset"],
+  ["Dinner", "Late Night"],
+  ["Dinner"],
+];
+const diningGroups: PublicDiningExperience["group"][] = [
+  "Small group",
+  "Couple",
+  "Large group",
+];
+
+export const publicDining: PublicDiningExperience[] = destinations.flatMap(
+  (destination) =>
+    diningNames[destination.id].map((name, index) => ({
+      slug: slugify(name),
+      name,
+      destinationId: destination.id,
+      destination: destination.name,
+      type: diningTypes[index],
+      moments: diningMoments[index],
+      zone: locations[destination.id][index % locations[destination.id].length],
+      group: diningGroups[index % diningGroups.length],
+      image: index % 2 ? "/demo/villa-alt.jpg" : "/demo/experience.jpg",
+      description:
+        "Una experiencia gastronómica coordinada por Yacht RM y disponible para solicitud concierge.",
+      dressCode: index % 2 ? "Smart elegant" : undefined,
+      priceIndication:
+        index % 3 === 0 ? "Experiencia personalizada" : "Según selección",
+      includes: [
+        "Coordinación concierge",
+        "Solicitud y seguimiento",
+        "Personalización de la experiencia",
+      ],
+    })),
+);
+
+export const curatedExperiences: CuratedExperience[] = [
+  {
+    id: "miami-weekend",
+    name: "Miami Weekend",
+    destinationId: "miami",
+    destination: "Miami",
+    image: "/demo/villa-alt.jpg",
+    style: "Luxury Weekend",
+    interests: ["Yacht", "Villa", "Dining", "Nightlife", "Transport"],
+    days: [
+      {
+        day: "01",
+        activities: ["Airport Pickup", "Villa Check-in", "Private Dinner"],
+      },
+      { day: "02", activities: ["Yacht", "Sunset", "Nightlife"] },
+      { day: "03", activities: ["Beach Club", "Wellness", "Chauffeur"] },
+    ],
+  },
+  {
+    id: "riviera-private-escape",
+    name: "Riviera Private Escape",
+    destinationId: "riviera-maya",
+    destination: "Riviera Maya",
+    image: "/demo/yacht-main.jpg",
+    style: "Relax",
+    interests: [
+      "Transport",
+      "Villa",
+      "Private Chef",
+      "Yacht",
+      "Dining",
+      "Wellness",
+    ],
+    days: [
+      { day: "01", activities: ["Transfer", "Villa", "Chef"] },
+      { day: "02", activities: ["Yacht", "Snorkel", "Dinner"] },
+      { day: "03", activities: ["Cenote", "Wellness"] },
+    ],
+  },
+  {
+    id: "cabos-celebration",
+    name: "Cabos Celebration",
+    destinationId: "los-cabos",
+    destination: "Los Cabos",
+    image: "/demo/yacht-alt.jpg",
+    style: "Celebration",
+    interests: ["Yacht", "Private Chef", "Villa", "Nightlife", "Transport"],
+    days: [
+      {
+        day: "01",
+        activities: ["Private Transfer", "Villa", "Welcome Dinner"],
+      },
+      { day: "02", activities: ["Yacht", "Private Chef", "Nightlife"] },
+      { day: "03", activities: ["Beach", "Wellness"] },
+    ],
+  },
+];

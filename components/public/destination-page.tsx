@@ -135,6 +135,28 @@ export function DestinationPage({
           );
         })}
       </section>
+      <section className="destination-stay-cta">
+        <span>YOUR STAY, DESIGNED</span>
+        <h2>Diseñamos toda tu estadía.</h2>
+        <p>Un solo itinerario para cada momento de tu viaje.</p>
+        <Link
+          className="public-primary"
+          href={`/plan-your-stay?destination=${destination.id}`}
+        >
+          Planear mi viaje en {destination.name}
+        </Link>
+      </section>
+      <section className="destination-stay-cta">
+        <span>YOUR STAY, DESIGNED</span>
+        <h2>Diseñamos toda tu estadía en {destination.name}.</h2>
+        <p>Un itinerario conectado, desde tu llegada hasta la última noche.</p>
+        <Link
+          className="public-primary"
+          href={`/plan-your-stay?destination=${destination.id}`}
+        >
+          Planear mi viaje en {destination.name}
+        </Link>
+      </section>
       <section className="destination-contact" id="destination-contact">
         <Image
           src="/demo/experience.jpg"

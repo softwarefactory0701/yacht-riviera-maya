@@ -270,9 +270,9 @@ export function PublicHome({
               <span key={item}>{item}</span>
             ))}
           </div>
-          <button className="public-primary" onClick={() => setConcierge(true)}>
+          <Link className="public-primary" href="/plan-your-stay">
             Diseñar mi experiencia
-          </button>
+          </Link>
         </motion.div>
       </section>
 
@@ -293,12 +293,9 @@ export function PublicHome({
               <p>{plan}</p>
             </div>
           ))}
-          <button
-            className="public-text-link"
-            onClick={() => setConcierge(true)}
-          >
+          <Link className="public-text-link" href="/plan-your-stay">
             Planear mi viaje <ArrowRight />
-          </button>
+          </Link>
         </div>
         <div className="public-stay-image">
           <Image
@@ -333,7 +330,7 @@ export function PublicHome({
               </div>
               <span>{place}</span>
               <h3>{name}</h3>
-              <button onClick={() => setConcierge(true)}>Solicitar mesa</button>
+              <Link href="/dining">Solicitar mesa</Link>
             </article>
           ))}
         </div>
@@ -449,6 +446,9 @@ function ConciergeModal({
               Contanos el destino y la experiencia que imaginás. En la próxima
               fase conectaremos este acceso con el equipo Yacht RM.
             </p>
+            <Link className="public-primary" href="/plan-your-stay">
+              Diseñar mi viaje
+            </Link>
             <small>Interacción de demostración · Sin envío de datos</small>
           </motion.div>
         </div>

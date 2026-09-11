@@ -51,8 +51,9 @@ export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
   const navigation = [
     ["Destinos", "#destinos"],
     ["Experiencias", "#experiencias"],
-    ["Concierge", "#concierge"],
-    ["Dining", "#dining"],
+    ["Concierge", "/concierge"],
+    ["Dining", "/dining"],
+    ["Plan Your Stay", "/plan-your-stay"],
   ];
 
   return (
@@ -91,7 +92,12 @@ export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
             </AnimatePresence>
           </div>
           {navigation.map(([label, href]) => (
-            <Link key={label} href={pathname === "/" ? href : `/${href}`}>
+            <Link
+              key={label}
+              href={
+                href.startsWith("/") || pathname === "/" ? href : `/${href}`
+              }
+            >
               {label}
             </Link>
           ))}
@@ -144,7 +150,11 @@ export function PublicHeader({ onConcierge }: { onConcierge: () => void }) {
                 {navigation.map(([label, href]) => (
                   <Link
                     key={label}
-                    href={pathname === "/" ? href : `/${href}`}
+                    href={
+                      href.startsWith("/") || pathname === "/"
+                        ? href
+                        : `/${href}`
+                    }
                     onClick={() => setOpen(false)}
                   >
                     {label}

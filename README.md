@@ -61,6 +61,22 @@ La futura integración debe mapear la solicitud pública a un lead con:
 El flujo de producción previsto es: solicitud pública → lead → asignación por
 destino → seguimiento concierge → cotización → reserva → operación.
 
+### Dining y planificación de viajes
+
+Las solicitudes Dining se guardan como `yrm-dining-request` y deben convertirse
+en un lead con destino, categoría `dining`, experiencia o mesa solicitada,
+fecha, hora, cantidad de personas y contacto. Cualquier comisión o referral
+dependerá de un acuerdo real y confirmado con cada establecimiento.
+
+Plan Your Stay guarda `yrm-trip-request`. El futuro modelo `Trip` contempla:
+cliente, destino, fechas, personas, alojamiento, intereses, estilo, presupuesto,
+ejecutivo asignado y estado. Sus estados previstos son `New`, `Designing`,
+`Proposal Sent`, `Confirmed`, `In Stay` y `Completed`.
+
+Flujo previsto: Plan Your Stay → Lead → Trip → ejecutivo → Quote → Services →
+Booking → Operation. En esta fase todo continúa siendo una simulación local sin
+backend, disponibilidad real ni envío de información.
+
 ## Recursos
 
 Las imágenes críticas de la demo viven en `public/demo/` para evitar dependencias de red durante presentaciones. Las instrucciones para incorporar el logotipo oficial están en `public/brand/README.md`.

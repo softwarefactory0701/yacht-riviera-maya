@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { PublicHeader } from "./public-header";
+import Link from "next/link";
 
 export function PublicPageShell({
   children,
@@ -58,6 +59,9 @@ export function PublicPageShell({
                 Compartinos la experiencia que imaginás. Este acceso es
                 demostrativo y no envía información todavía.
               </p>
+              <Link className="public-primary" href="/plan-your-stay">
+                Diseñar mi viaje
+              </Link>
               <small>Interacción de demostración · Sin envío de datos</small>
             </motion.div>
           </div>
